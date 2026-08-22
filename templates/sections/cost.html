@@ -1,0 +1,29 @@
+<section id="sec-cost" class="section-card nav-anchor">
+    <div class="section-header"><i class="bi bi-cash-stack text-primary me-2"></i> 9. Cost-Sensitive Threshold Optimisation</div>
+    <div class="p-3">
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="output-box">
+                    <!--<div class="control-panel">
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold d-flex justify-content-between mb-1"><span>Cost FP:</span> <span id="lbl_c_fp" class="badge bg-primary">£50</span></label>
+                                <input type="range" class="form-range" id="input_c_fp" min="10" max="150" step="10" value="50" oninput="document.getElementById('lbl_c_fp').innerText = '£'+this.value; triggerUpdate();">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold d-flex justify-content-between mb-1"><span>Cost FN:</span> <span id="lbl_c_fn" class="badge bg-primary">£25</span></label>
+                                <input type="range" class="form-range" id="input_c_fn" min="10" max="100" step="5" value="25" oninput="document.getElementById('lbl_c_fn').innerText = '£'+this.value; triggerUpdate();">
+                            </div>
+                        </div>
+                    </div>-->
+                    <div class="alert alert-warning py-2 mb-0" style="font-size: 0.8rem;">
+                        <strong>Optimal Cutoff ($t^*$):</strong> <span id="opt_thresh_val" class="fw-bold">{{ data.opt_thresh }}</span> | <strong>Min Expected Cost:</strong> <span id="min_cost_val" class="fw-bold">{{ data.min_cost }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box text-center"><img id="img_cost_curve" src="data:image/png;base64,{{ data.plots.cost_curve }}" class="img-fluid rounded" alt="Cost Curve"></div>
+            </div>
+        </div>
+    </div>
+</section>

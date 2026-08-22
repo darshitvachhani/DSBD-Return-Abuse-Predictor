@@ -1,0 +1,58 @@
+<section id="sec-bag" class="section-card nav-anchor">
+    <div class="section-header"><i class="bi bi-collection text-primary me-2"></i> 6. Bagging Classifier</div>
+    <div class="p-3">
+        <div class="row g-3">
+            <!-- Left: Code & ROC -->
+            <div class="col-lg-6">
+                <div class="code-box">
+                    <pre>
+                        <code class="language-python">
+                            # Bootstrap Aggregated (Bagging) Classifier
+                                bagging = BaggingClassifier(
+                                    estimator=DecisionTreeClassifier(max_depth=8, min_samples_leaf=5),
+                                    n_estimators=bag_trees, random_state=42, n_jobs=-1
+                                )
+                                bagging.fit(X_train, y_train)
+                                y_prob_bag = bagging.predict_proba(X_test)[:, 1]
+                                y_pred_bag = (y_prob_bag >= bag_thresh).astype(int)
+                        </code>
+                    </pre>
+                </div>
+                <div class="text-center mt-2">
+                    <img id="img_bag_imp" src="data:image/png;base64,{{ data.plots.bag_imp }}" class="img-fluid rounded output-box mb-2" alt="Bagging Feature Importance">
+                    <img id="img_roc_bag" src="data:image/png;base64,{{ data.plots.roc_bag }}" class="img-fluid rounded output-box" alt="Bagging ROC">
+                </div>
+            </div>
+            <!-- Right: Controls & Representative Tree Plot -->
+            <div class="col-lg-6">
+                <div class="output-box">
+                    <!-- <div class="control-panel">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <label class="form-label small fw-bold d-flex justify-content-between mb-1">
+                                    <span>Estimators:</span> <span id="lbl_bag_trees" class="badge bg-primary">60</span>
+                                </label>
+                                <input type="range" class="form-range" id="input_bag_trees" min="25" max="150" step="25" value="60" oninput="document.getElementById('lbl_bag_trees').innerText = this.value; triggerUpdate();">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-bold d-flex justify-content-between mb-1">
+                                    <span>Cutoff:</span> <span id="lbl_bag_thresh" class="badge bg-primary">0.50</span>
+                                </label>
+                                <input type="range" class="form-range" id="input_bag_thresh" min="0.10" max="0.90" step="0.05" value="0.50" oninput="document.getElementById('lbl_bag_thresh').innerText = parseFloat(this.value).toFixed(2); triggerUpdate();">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="badge bg-primary metric-badge">Accuracy: <span id="m_bag_acc">{{ data.metrics.bag.acc }}</span></span>
+                        <span class="badge bg-success metric-badge">Precision: <span id="m_bag_prec">{{ data.metrics.bag.prec }}</span></span>
+                        <span class="badge bg-warning text-dark metric-badge">Recall: <span id="m_bag_rec">{{ data.metrics.bag.rec }}</span></span>
+                        <span class="badge bg-info text-dark metric-badge">AUC: <span id="m_bag_auc">{{ data.metrics.bag.auc }}</span></span>
+                    </div>
+                    <div class="text-center">
+                        <img id="img_bag_tree" src="data:image/png;base64,{{ data.plots.bag_tree }}" class="img-fluid rounded border" alt="Bagging Representative Tree">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

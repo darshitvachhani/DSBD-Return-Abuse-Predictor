@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Abuse Analytics & Machine Learning Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <style>
+        body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1e293b; }
+        .sidebar { background: #0f172a; min-height: 100vh; color: #fff; z-index: 1000; width: 240px; }
+        .sidebar .nav-link { color: #94a3b8; font-size: 0.84rem; font-weight: 500; border-radius: 6px; margin-bottom: 4px; padding: 7px 10px; }
+        .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #fff; background: #334155; }
+        .main-container { margin-left: 240px; padding: 25px 35px; }
+        .section-card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06); margin-bottom: 35px; border: 1px solid #e2e8f0; overflow: hidden; }
+        .section-header { background: #f8fafc; padding: 12px 20px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0f172a; }
+        .code-box { background: #282c34; border-radius: 8px; padding: 12px; font-size: 0.76rem; max-height: 380px; overflow-y: auto; }
+        .output-box { background: #ffffff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 14px; }
+        .control-panel { background: #eff6ff; border: 2px solid #3b82f6; border-radius: 8px; padding: 14px; margin-bottom: 14px; }
+        .metric-badge { font-size: 0.8rem; font-weight: 600; padding: 6px 9px; border-radius: 6px; }
+        .nav-anchor { scroll-margin-top: 20px; }
+    </style>
+</head>
+<body>
+<div class="container-fluid p-0">
+    <nav class="sidebar py-3 px-3 position-fixed">
+        <div class="px-2 mb-3">
+            <h6 class="text-white fw-bold mb-0"><i class="bi bi-shield-check text-primary me-1"></i> FraudGuard AI</h6>
+            <small class="text-muted" style="font-size: 0.72rem;">Return Abuse Analytics</small>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item"><a class="nav-link active" href="#sec-simulator"><i class="bi bi-cpu-fill text-warning me-2"></i> Live Return Tester</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-intro"><i class="bi bi-info-circle me-2"></i> 1. Business Context</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-split"><i class="bi bi-pie-chart me-2"></i> 2. Data Partitioning</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-nlp"><i class="bi bi-chat-left-text me-2"></i> 3. Text Analytics</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-lr"><i class="bi bi-activity me-2"></i> 4. Logistic Regression</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-cart"><i class="bi bi-diagram-3 me-2"></i> 5. Classification Tree</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-rf"><i class="bi bi-tree me-2"></i> 6. Random Forest</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-bag"><i class="bi bi-collection me-2"></i> 7. Bagging Classifier</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-comp"><i class="bi bi-table me-2"></i> 8. Model Benchmark</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-clust"><i class="bi bi-people me-2"></i> 9. Customer Segments</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-cost"><i class="bi bi-cash-stack me-2"></i> 10. Cost Optimization</a></li>
+        </ul>
+    </nav>
+    <main class="main-container">
+        <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
+            <div>
+                <h3 class="fw-bold mb-1">Return Abuse Detection & Behavioral Analytics</h3>
+                <p class="text-muted small mb-0">Modular Localhost Workbench (50/50 Code & Visual Breakdown)</p>
+            </div>
+            <button class="btn btn-primary btn-sm fw-bold px-3" onclick="triggerUpdate()"><i class="bi bi-arrow-repeat me-1"></i> Sync & Recompute Models</button>
+        </div>
+
+        {% include "sections/simulator.html" %}
+        {% include "sections/business_context.html" %}
+        {% include "sections/data_split.html" %}
+        {% include "sections/text_analytics.html" %}
+        {% include "sections/logistic.html" %}
+        {% include "sections/cart.html" %}
+        {% include "sections/random_forest.html" %}
+        {% include "sections/bagging.html" %}
+        {% include "sections/benchmark.html" %}
+        {% include "sections/clustering.html" %}
+        {% include "sections/cost.html" %}
+    </main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+<script>
+    hljs.highlightAll();
+
+    function evaluateSingleReturn() {
+        const payload = {
+            order_val: parseFloat(document.getElementById('sim_order_val').value),
+            price: parseFloat(document.getElementById('sim_price').value),
+            days_ret: parseFloat(document.getElementById('sim_days_ret').value),
+            prior_rets: parseFloat(document.getElementById('sim_prior_rets').value),
+            ret_rate: parseFloat(document.getElementById('sim_ret_rate').value),
+            acc_age: parseFloat(document.getElementById('sim_acc_age').value),
+            discount: parseFloat(document.getElementById('sim_discount').value),
+            pay_method: document.getElementById('sim_pay_method').value,
+            reason_text: document.getElementById('sim_reason_text').value
+        };
+
+        fetch('/api/predict_single', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            const resBox = document.getElementById('sim_result_box');
+            resBox.className = `alert alert-${data.badge} mt-3 p-3 d-flex justify-content-between align-items-center`;
+            document.getElementById('sim_pred_title').innerText = `Risk Score: ${data.prob} — ${data.pred_class}`;
+            document.getElementById('sim_pred_action').innerHTML = `<strong>Action:</strong> ${data.action}`;
+            document.getElementById('sim_badge').className = `badge bg-${data.badge} fs-6`;
+            document.getElementById('sim_badge').innerText = data.prob_raw > 0.65 ? 'High Risk' : (data.prob_raw > 0.35 ? 'Medium Risk' : 'Low Risk');
+        })
+        .catch(err => console.error("Error evaluating return:", err));
+    }
+
+    function triggerUpdate() {
+        const payload = {
+            test_size: parseFloat(document.getElementById('input_test_size').value),
+            lr_thresh: parseFloat(document.getElementById('input_lr_thresh').value),
+            cart_depth: parseInt(document.getElementById('input_cart_depth').value),
+            cart_thresh: parseFloat(document.getElementById('input_cart_thresh').value),
+            rf_trees: parseInt(document.getElementById('input_rf_trees').value),
+            rf_depth: 8,
+            rf_thresh: parseFloat(document.getElementById('input_rf_thresh').value),
+            bag_trees: parseInt(document.getElementById('input_bag_trees').value),
+            bag_thresh: parseFloat(document.getElementById('input_bag_thresh').value),
+            n_clusters: parseInt(document.getElementById('input_n_clusters').value),
+            c_fp: parseFloat(document.getElementById('input_c_fp').value),
+            c_fn: parseFloat(document.getElementById('input_c_fn').value)
+        };
+
+        fetch('/api/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            for (let [key, b64] of Object.entries(data.plots)) {
+                let elem = document.getElementById('img_' + key);
+                if (elem) elem.src = 'data:image/png;base64,' + b64;
+            }
+
+            for (let [m_key, m_val] of Object.entries(data.metrics)) {
+                ['acc', 'prec', 'rec', 'auc'].forEach(metric => {
+                    let badge = document.getElementById(`m_${m_key}_${metric}`);
+                    if (badge) badge.innerText = m_val[metric];
+                });
+                ['acc', 'prec', 'rec', 'f1', 'auc', 'fp', 'fn'].forEach(metric => {
+                    let cell = document.getElementById(`t_${m_key}_${metric}`);
+                    if (cell) cell.innerText = m_val[metric];
+                });
+            }
+
+            document.getElementById('opt_thresh_val').innerText = data.opt_thresh;
+            document.getElementById('min_cost_val').innerText = data.min_cost;
+
+            let tbodyLr = document.getElementById('tbl_lr_coefs');
+            if (tbodyLr && data.lr_coefs) {
+                tbodyLr.innerHTML = '';
+                data.lr_coefs.forEach(r => {
+                    tbodyLr.innerHTML += `<tr><td>${r.Predictor}</td><td>${r.Coefficient}</td><td>${r['z-stat']}</td><td>${r['p-value']}</td><td>${r['Odds Ratio']}</td></tr>`;
+                });
+            }
+
+            let tbodyClust = document.getElementById('tbl_clusters');
+            if (tbodyClust && data.clusters) {
+                tbodyClust.innerHTML = '';
+                data.clusters.forEach(c => {
+                    tbodyClust.innerHTML += `<tr><td>${c.Segment}</td><td>${c['Customer Count']}</td><td><strong>${c['Abuse Rate']}</strong></td><td>${parseFloat(c['Avg Prior Returns']).toFixed(2)}</td><td>${parseFloat(c['Lifetime Return Rate']).toFixed(2)}</td></tr>`;
+                });
+            }
+        })
+        .catch(err => console.error("Error updating dashboard:", err));
+    }
+</script>
+</body>
+</html>

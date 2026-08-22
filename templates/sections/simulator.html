@@ -1,0 +1,28 @@
+<section id="sec-simulator" class="section-card nav-anchor border-primary">
+    <div class="section-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-cpu-fill me-2 text-warning"></i> Interactive Return Abuse Risk Evaluator</span>
+        <span class="badge bg-light text-primary">Live Predictor</span>
+    </div>
+    <div class="p-4">
+        <p class="text-muted small mb-3">Manually enter transaction, behavioral, and reason values below to instantly evaluate return risk via the live ensemble engine.</p>
+        <div class="row g-3">
+            <div class="col-md-3"><label class="form-label small fw-bold">Order Value (£)</label><input type="number" id="sim_order_val" class="form-control form-control-sm" value="85.0" step="1"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Item Price (£)</label><input type="number" id="sim_price" class="form-control form-control-sm" value="45.0" step="1"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Days to Return</label><input type="number" id="sim_days_ret" class="form-control form-control-sm" value="21" min="1" max="30"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Prior Returns</label><input type="number" id="sim_prior_rets" class="form-control form-control-sm" value="4" min="0" max="50"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Lifetime Rate (0-1)</label><input type="number" id="sim_ret_rate" class="form-control form-control-sm" value="0.45" step="0.05" min="0" max="1"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Account Age (Days)</label><input type="number" id="sim_acc_age" class="form-control form-control-sm" value="120"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Discount (%)</label><input type="number" id="sim_discount" class="form-control form-control-sm" value="5" min="0" max="50"></div>
+            <div class="col-md-3"><label class="form-label small fw-bold">Payment Method</label><select id="sim_pay_method" class="form-select form-select-sm"><option>Credit Card</option><option>Debit Card</option><option>PayPal</option><option>Bank Transfer</option></select></div>
+            <div class="col-md-6"><label class="form-label small fw-bold">Free Text Return Reason</label><input type="text" id="sim_reason_text" class="form-control form-control-sm" value="Item did not suit me"></div>
+            <div class="col-md-6 d-flex align-items-end"><button class="btn btn-primary btn-sm w-100 fw-bold" onclick="evaluateSingleReturn()"><i class="bi bi-shield-check me-1"></i> Evaluate Return Abuse Probability</button></div>
+        </div>
+        <div id="sim_result_box" class="alert alert-warning mt-3 p-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="fw-bold mb-1" id="sim_pred_title">Risk Score: 78.4% — Abusive Return (High Risk)</h6>
+                <span class="small" id="sim_pred_action"><strong>Action:</strong> Manual Warehouse Inspection Required Before Refund Authorization</span>
+            </div>
+            <span class="badge bg-danger fs-6" id="sim_badge">High Risk</span>
+        </div>
+    </div>
+</section>

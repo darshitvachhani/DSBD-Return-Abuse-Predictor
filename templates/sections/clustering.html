@@ -1,0 +1,31 @@
+<section id="sec-clust" class="section-card nav-anchor">
+    <div class="section-header"><i class="bi bi-people text-primary me-2"></i> 8. Customer Behavioural Clustering</div>
+    <div class="p-3">
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="output-box">
+                    <!-- <div class="control-panel">
+                        <label class="form-label small fw-bold d-flex justify-content-between mb-1"><span>Clusters (k):</span> <span id="lbl_n_clusters" class="badge bg-primary">3</span></label>
+                        <input type="range" class="form-range" id="input_n_clusters" min="2" max="5" step="1" value="3" oninput="document.getElementById('lbl_n_clusters').innerText = this.value; triggerUpdate();">
+                    </div>-->
+                    <div class="text-center"><img id="img_elbow" src="data:image/png;base64,{{ data.plots.elbow }}" class="img-fluid rounded mb-2" alt="Elbow"></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box">
+                    <div class="text-center mb-2"><img id="img_pca_cluster" src="data:image/png;base64,{{ data.plots.pca_cluster }}" class="img-fluid rounded" alt="PCA"></div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped" style="font-size: 0.72rem;">
+                            <thead><tr><th>Segment</th><th>Count</th><th>Abuse %</th><th>Prior Returns</th><th>Return Rate</th></tr></thead>
+                            <tbody id="tbl_clusters">
+                                {% for c in data.clusters %}
+                                <tr><td>{{ c.Segment }}</td><td>{{ c['Customer Count'] }}</td><td><strong>{{ c['Abuse Rate'] }}</strong></td><td>{{ "%.2f"|format(c['Avg Prior Returns']) }}</td><td>{{ "%.2f"|format(c['Lifetime Return Rate']) }}</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
