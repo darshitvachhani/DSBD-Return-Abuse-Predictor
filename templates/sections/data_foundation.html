@@ -1,0 +1,100 @@
+<section id="sec-data-found" class="section-card nav-anchor">
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-database-fill-gear text-primary me-2"></i> 2. Dataset Provenance, Filtering & Persona Synthesis</span>
+        <span class="badge bg-secondary">Data Engineering</span>
+    </div>
+    <div class="p-3">
+
+        <!-- Stage 1: Funnel Pipeline Flow Cards -->
+        <div class="row g-2 mb-3 text-center">
+            <div class="col-md-3">
+                <div class="p-3 rounded bg-light border border-primary-subtle h-100 d-flex flex-column justify-content-center">
+                    <span class="badge bg-primary mb-1 align-self-center">1. Raw Repository</span>
+                    <h5 class="fw-bold text-dark mb-0 font-monospace">~541,910</h5>
+                    <small class="text-muted" style="font-size: 0.72rem;">UCI Online Retail II Records</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded bg-light border border-info-subtle h-100 d-flex flex-column justify-content-center">
+                    <span class="badge bg-info text-dark mb-1 align-self-center">2. Filtered Candidate Cohort</span>
+                    <h5 class="fw-bold text-dark mb-0 font-monospace">12,450</h5>
+                    <small class="text-muted" style="font-size: 0.72rem;">Clean Non-Wholesale Transactions</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded bg-light border border-warning-subtle h-100 d-flex flex-column justify-content-center">
+                    <span class="badge bg-warning text-dark mb-1 align-self-center">3. Active Returns Sample</span>
+                    <h5 class="fw-bold text-dark mb-0 font-monospace">9,839</h5>
+                    <small class="text-muted" style="font-size: 0.72rem;">Processed Return Events</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="p-3 rounded bg-light border border-danger-subtle h-100 d-flex flex-column justify-content-center">
+                    <span class="badge bg-danger mb-1 align-self-center">4. Ground Truth Abuse Target</span>
+                    <h5 class="fw-bold text-danger mb-0 font-monospace">3,099 (31.5%)</h5>
+                    <small class="text-muted" style="font-size: 0.72rem;">Empirically Flagged Return Fraud</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 2: Origin Source, Persona Synthesis & TF-IDF Extraction -->
+        <div class="row g-3 align-items-stretch">
+            <!-- Left Card: Benchmark Provenance -->
+            <div class="col-lg-4">
+                <div class="output-box h-100 p-3 border-start border-primary border-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-file-earmark-spreadsheet-fill text-primary me-2"></i>Benchmark Source: UCI Online Retail II
+                        </h6>
+                        <p class="small text-muted mb-2" style="font-size: 0.77rem; line-height: 1.5;">
+                            Derived from the standard <strong>UCI Online Retail II Data Set</strong> (donated by Dr. Daqing Chen, London South Bank University).
+                        </p>
+                        <ul class="small text-muted ps-3 mb-0" style="font-size: 0.75rem; line-height: 1.5;">
+                            <li><strong>Raw Baseline:</strong> Transaction logs across UK & international retail cohorts.</li>
+                            <li><strong>Data Cleansing:</strong> Filtered out wholesale bulk cancellations, negative unit anomalies, and missing IDs.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Card: Persona-Driven Feature Synthesis -->
+            <div class="col-lg-4">
+                <div class="output-box h-100 p-3 border-start border-info border-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-people-fill text-info me-2"></i>Shopper Persona Synthesis
+                        </h6>
+                        <p class="small text-muted mb-2" style="font-size: 0.77rem; line-height: 1.5;">
+                            Because standard transactional logs omit frontline operational risk signals, auxiliary features were synthesized by mapping behavioral profiles:
+                        </p>
+                        <ul class="small text-muted ps-3 mb-0" style="font-size: 0.75rem; line-height: 1.5;">
+                            <li><strong>Bracketing & Wardrobing:</strong> Multi-size purchasing, extended delays (&gt;20 days), and high lifetime return rates.</li>
+                            <li><strong>Device & Metadata:</strong> Device fingerprinting and address matches tied to historical velocity.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Card: Unstructured Return Reasons & TF-IDF -->
+            <div class="col-lg-4">
+                <div class="output-box h-100 p-3 border-start border-purple border-4 d-flex flex-column justify-content-between" style="border-left-color: #8b5cf6 !important;">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-2">
+                            <i class="bi bi-chat-square-quote-fill text-purple me-2" style="color: #8b5cf6;"></i>Text Transformation (TF-IDF)
+                        </h6>
+                        <p class="small text-muted mb-2" style="font-size: 0.77rem; line-height: 1.5;">
+                            Free-text return comments (e.g., <em>"arrived damaged"</em>, <em>"wrong color"</em>) were vectorized using <strong>TF-IDF</strong> (fit strictly on the training partition).
+                        </p>
+                        <div class="p-2 rounded bg-light border">
+                            <strong class="d-block text-dark mb-1" style="font-size: 0.73rem;"><i class="bi bi-lightbulb text-warning me-1"></i>What is TF-IDF in simple terms?</strong>
+                            <span class="text-muted" style="font-size: 0.71rem; line-height: 1.4; display: block;">
+                                Think of it as a smart filter: it ignores repetitive filler words that everyone uses (like <em>"item"</em> or <em>"ordered"</em>) and gives higher importance to rare, informative words (like <em>"damaged"</em> or <em>"wrong"</em>) that actually help the model spot fraud.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

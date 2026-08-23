@@ -1,22 +1,142 @@
 <section id="sec-intro" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-info-circle text-primary me-2"></i> 1. Business Problem & Strategic Framework</div>
-    <div class="p-4">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <h6 class="fw-bold text-dark">The Challenge: Abuse vs. Churn Risk</h6>
-                <p class="small text-muted">Returns generate massive operational friction. Blanket return friction alienates high-value legitimate customers. Machine learning creates dynamic, risk-tiered policy interventions.</p>
-            </div>
-            <div class="col-md-6">
-                <div class="p-3 bg-light rounded border">
-                    <h6 class="fw-bold text-dark mb-2">Core Analytical Objectives</h6>
-                    <ul class="small text-muted mb-0 ps-3">
-                        <li>Supervised Classification (Logistic, CART, Random Forest, Bagging).</li>
-                        <li>Unstructured Text Feature Extraction via TF-IDF Vectorization.</li>
-                        <li>Customer Segmentation via K-Means Clustering and 2D PCA.</li>
-                        <li>Threshold Calibration under Asymmetric Business Misclassification Costs.</li>
-                    </ul>
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-info-circle text-primary me-2"></i> 1. Business Context & Industry Background</span>
+        <span class="badge bg-secondary">Executive Overview</span>
+    </div>
+    <div class="p-3">
+
+        <!-- Executive Narrative Banner -->
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="output-box p-3 border-start border-danger border-4">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>The E-Commerce Return & Fraud Epidemic
+                    </h6>
+                    <p class="text-muted small mb-2" style="line-height: 1.6;">
+                        E-commerce return rates have escalated to <strong>24.5%</strong> (nearly 3&times; higher than physical in-store return rates of 8.7%). Customer-friendly, "no-questions-asked" return policies—originally designed to drive digital sales conversion—have become heavily exploited by organized refund syndicates and opportunistic shoppers engaging in wardrobing, synthetic item-not-received claims, and counterfeit tag swaps.
+                    </p>
+                    <p class="text-muted small mb-0" style="line-height: 1.6;">
+                        Blanket aggressive crackdowns (such as universally eliminating free returns) risk alienating high-lifetime-value (LTV) loyalists. This platform delivers a <strong>dual-tier machine learning architecture</strong>: automating instant, zero-friction refunds for verified legitimate customers while precisely intercepting high-risk returns before unrecoverable reverse logistics costs are incurred.
+                    </p>
                 </div>
             </div>
         </div>
+
+        <!-- Real-World Case Studies with Full Aspect Ratio Container -->
+        <div class="row g-3 mb-3 align-items-stretch">
+            <!-- Case Study 1: Organized Refund Syndicate -->
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle fw-bold" style="font-size: 0.72rem;">Organized Syndicate Case</span>
+                            <small class="text-muted" style="font-size: 0.72rem;">Times of India (Dec 2024)</small>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.92rem;">Myntra ₹1.1 Crore Bulk Return Scheme</h6>
+                        
+                        <!-- Auto-Scaled Image Frame: 100% visible width, no cropping -->
+                        <div class="p-2 rounded bg-light border border-secondary-subtle my-2 text-center" style="background-color: #f8fafc;">
+                            <img src="{{ url_for('static', filename='img/myntra_scam.png') }}" 
+                                 class="img-fluid rounded border" 
+                                 style="max-height: 250px; width: auto; max-width: 100%; object-fit: contain; display: inline-block;" 
+                                 alt="Myntra ₹1.1 Crore Refund Scam">
+                        </div>
+
+                        <ul class="text-muted small ps-3 mb-0" style="font-size: 0.76rem; line-height: 1.55;">
+                            <li><strong>Systematic Exploitation:</strong> Fraudsters placed bulk apparel orders across interstate corridors, falsely claiming missing or incorrect items to extract instant refunds.</li>
+                            <li><strong>The Blind Spot:</strong> Illustrates how rule-based systems fail without behavioral graph signals and automated risk scoring.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Case Study 2: Global Macro Scale -->
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle fw-bold" style="font-size: 0.72rem;">Global Industry Benchmark</span>
+                            <small class="text-muted" style="font-size: 0.72rem;">Appriss Retail & Deloitte (Jan 2025)</small>
+                        </div>
+                        <h6 class="fw-bold text-dark mb-2" style="font-size: 0.92rem;">Retailers Lost $103 Billion to Return Abuse</h6>
+                        
+                        <!-- Auto-Scaled Image Frame: 100% visible width, no cropping -->
+                        <div class="p-2 rounded bg-light border border-secondary-subtle my-2 text-center" style="background-color: #f8fafc;">
+                            <img src="{{ url_for('static', filename='img/retail_dive_loss.png') }}" 
+                                 class="img-fluid rounded border" 
+                                 style="max-height: 250px; width: auto; max-width: 100%; object-fit: contain; display: inline-block;" 
+                                 alt="Retail Dive $103B Fraud Loss Brief">
+                        </div>
+
+                        <ul class="text-muted small ps-3 mb-0" style="font-size: 0.76rem; line-height: 1.55;">
+                            <li><strong>$103 Billion Annual Loss:</strong> Fraudulent returns accounted for ~15% of the $685B in total retail returns.</li>
+                            <li><strong>24.5% Online Return Rate:</strong> E-commerce return volumes create a massive surface area for return abuse compared to physical stores (8.7%).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unit Economics: Anatomy of a £45 Fraudulent Return -->
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="output-box p-3 border-start border-warning border-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold text-dark mb-0">
+                            <i class="bi bi-cash-stack text-warning me-2"></i>Unit Economics: The £45.00 Anatomy of a Fraudulent Return
+                        </h6>
+                        <span class="badge bg-warning text-dark fw-bold" style="font-size: 0.75rem;">Cumulative Operational Drain</span>
+                    </div>
+                    <p class="small text-muted mb-3" style="font-size: 0.77rem; line-height: 1.45;">
+                        When an abusive return is authorized, the enterprise suffers losses well beyond the refund amount:
+                    </p>
+                    <div class="row g-2 text-center">
+                        <div class="col-md-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted d-block" style="font-size: 0.72rem;">1. Reverse Freight</span>
+                                <strong class="text-danger small fs-6">£7.00</strong>
+                                <small class="text-muted d-block" style="font-size: 0.68rem;">Courier pickup & transit</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted d-block" style="font-size: 0.72rem;">2. Warehouse Inspection</span>
+                                <strong class="text-danger small fs-6">£6.00</strong>
+                                <small class="text-muted d-block" style="font-size: 0.68rem;">Manual QC & tag validation</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted d-block" style="font-size: 0.72rem;">3. Repackaging & Restock</span>
+                                <strong class="text-danger small fs-6">£5.00</strong>
+                                <small class="text-muted d-block" style="font-size: 0.68rem;">Poly-bagging & bin re-entry</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted d-block" style="font-size: 0.72rem;">4. Markdown & Depreciation</span>
+                                <strong class="text-danger small fs-6">£27.00</strong>
+                                <small class="text-muted d-block" style="font-size: 0.68rem;">Open-box loss & season lag</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Academic & Industry References Footer -->
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="p-2 px-3 rounded bg-light border d-flex justify-content-between align-items-center">
+                    <small class="text-muted" style="font-size: 0.73rem;">
+                        <i class="bi bi-journal-bookmark me-1 text-primary"></i><strong>References:</strong> 
+                        (1) Appriss Retail & Deloitte 2024 Consumer Returns in the Retail Industry Report; 
+                        (2) National Retail Federation (NRF) Return Fraud Benchmarks; 
+                        (3) Times of India Tech Desk (Dec 2024).
+                    </small>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>

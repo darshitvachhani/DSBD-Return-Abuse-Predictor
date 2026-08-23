@@ -32,19 +32,20 @@
             <small class="text-muted" style="font-size: 0.72rem;">Return Abuse Analytics Workbench</small>
         </div>
         <ul class="nav flex-column">
-            <li class="nav-item"><a class="nav-link active" href="#sec-simulator"><i class="bi bi-cpu-fill text-warning me-2"></i> Live Return Tester</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-intro"><i class="bi bi-info-circle me-2"></i> 1. The Problem</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-split"><i class="bi bi-pie-chart me-2"></i> 2. Data Partitioning</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-nlp"><i class="bi bi-chat-left-text me-2"></i> 3. Text Analytics</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-lr"><i class="bi bi-activity me-2"></i> 4. Logistic Regression</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-cart"><i class="bi bi-diagram-3 me-2"></i> 5. Classification Tree</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-rf"><i class="bi bi-tree me-2"></i> 6. Random Forest</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-bag"><i class="bi bi-collection me-2"></i> 7. Bagging</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-comp"><i class="bi bi-table me-2"></i> 8. Model Benchmark</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-implications"><i class="bi bi-lightbulb text-info me-2"></i> 9. Model Implications</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-clust"><i class="bi bi-people me-2"></i> 10. Segmentation & Clustering</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-cost"><i class="bi bi-cash-stack me-2"></i> 11. Cost Optimization</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-strategy"><i class="bi bi-graph-up-arrow text-success me-2"></i> 12. Business Impact & Policy</a></li>
+            <!-- <li class="nav-item"><a class="nav-link active" href="#sec-simulator"><i class="bi bi-cpu-fill text-warning me-2"></i> Live Return Tester</a></li> -->
+            <li class="nav-item"><a class="nav-link" href="#sec-intro"><i class="bi bi-info-circle me-2"></i> 1. Business Context</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-ds"><i class="bi bi-cpu me-2"></i> 2. Applying Data Science</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-split"><i class="bi bi-pie-chart me-2"></i> 3. Data Partitioning</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-nlp"><i class="bi bi-chat-left-text me-2"></i> 4. Text Analytics</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-lr"><i class="bi bi-activity me-2"></i> 5. Logistic Regression</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-cart"><i class="bi bi-diagram-3 me-2"></i> 6. Classification Tree</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-rf"><i class="bi bi-tree me-2"></i> 7. Random Forest</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-bag"><i class="bi bi-collection me-2"></i> 8. Bagging</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-comp"><i class="bi bi-table me-2"></i> 9. Model Benchmark</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-implications"><i class="bi bi-lightbulb text-info me-2"></i> 10. Model Implications</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-clust"><i class="bi bi-people me-2"></i> 11. Segmentation & Clustering</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-cost"><i class="bi bi-cash-stack me-2"></i> 12. Cost Optimization</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-strategy"><i class="bi bi-graph-up-arrow text-success me-2"></i> 13. Business Impact & Policy</a></li>
         </ul>
     </nav>
 
@@ -60,8 +61,10 @@
             </button>
         </div>
 
-        {% include "sections/simulator.html" %}
+        {# {% include "sections/simulator.html" %} #}
         {% include "sections/business_context.html" %}
+        {% include "sections/applying_data_science.html" %}
+        {% include "sections/data_foundation.html" %}
         {% include "sections/data_split.html" %}
         {% include "sections/text_analytics.html" %}
         {% include "sections/logistic.html" %}
@@ -201,6 +204,22 @@
                         <td><span class="badge ${badgeClass}">${c['Abuse Rate']}</span></td>
                         <td>${c['Avg Order Value']}</td>
                         <td>${c['Avg Return Window (Days)']}</td>
+                    </tr>`;
+                });
+            }
+
+            // 7. Update Category Clusters Table
+            let tbodyCatClust = document.getElementById('tbl_cat_clusters');
+            if (tbodyCatClust && data.cat_clusters) {
+                tbodyCatClust.innerHTML = '';
+                data.cat_clusters.forEach(k => {
+                    let badgeClass = k.Segment.includes('Premium') ? 'bg-danger' : (k.Segment.includes('Clearance') ? 'bg-warning text-dark' : 'bg-success');
+                    tbodyCatClust.innerHTML += `<tr>
+                        <td class="text-start fw-semibold">${k.Segment}</td>
+                        <td>${k['Item Count']}</td>
+                        <td><span class="badge ${badgeClass}">${k['Abuse Rate']}</span></td>
+                        <td>${k['Avg Price']}</td>
+                        <td>${k['Avg Discount']}</td>
                     </tr>`;
                 });
             }
