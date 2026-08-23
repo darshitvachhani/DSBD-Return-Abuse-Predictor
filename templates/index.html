@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
     <title>Return Abuse Analytics & Machine Learning Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
@@ -24,14 +25,15 @@
 </head>
 <body>
 <div class="container-fluid p-0">
+    <!-- Left Sidebar Navigation -->
     <nav class="sidebar py-3 px-3 position-fixed">
         <div class="px-2 mb-3">
             <h6 class="text-white fw-bold mb-0"><i class="bi bi-shield-check text-primary me-1"></i> FraudGuard AI</h6>
-            <small class="text-muted" style="font-size: 0.72rem;">Return Abuse Analytics</small>
+            <small class="text-muted" style="font-size: 0.72rem;">Return Abuse Analytics Workbench</small>
         </div>
         <ul class="nav flex-column">
             <li class="nav-item"><a class="nav-link active" href="#sec-simulator"><i class="bi bi-cpu-fill text-warning me-2"></i> Live Return Tester</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-intro"><i class="bi bi-info-circle me-2"></i> 1. Business Context</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-intro"><i class="bi bi-info-circle me-2"></i> 1. The Problem</a></li>
             <li class="nav-item"><a class="nav-link" href="#sec-split"><i class="bi bi-pie-chart me-2"></i> 2. Data Partitioning</a></li>
             <li class="nav-item"><a class="nav-link" href="#sec-nlp"><i class="bi bi-chat-left-text me-2"></i> 3. Text Analytics</a></li>
             <li class="nav-item"><a class="nav-link" href="#sec-lr"><i class="bi bi-activity me-2"></i> 4. Logistic Regression</a></li>
@@ -45,13 +47,17 @@
             <li class="nav-item"><a class="nav-link" href="#sec-strategy"><i class="bi bi-graph-up-arrow text-success me-2"></i> 12. Business Impact & Policy</a></li>
         </ul>
     </nav>
+
+    <!-- Main Content Container -->
     <main class="main-container">
         <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
             <div>
                 <h3 class="fw-bold mb-1">Return Abuse Detection & Behavioral Analytics</h3>
                 <p class="text-muted small mb-0">End-to-End Enterprise Risk Scoring, Segmentation & Policy Optimization</p>
             </div>
-            <button class="btn btn-primary btn-sm fw-bold px-3" onclick="triggerUpdate()"><i class="bi bi-arrow-repeat me-1"></i> Sync & Recompute Models</button>
+            <button class="btn btn-primary btn-sm fw-bold px-3" onclick="triggerUpdate()">
+                <i class="bi bi-arrow-repeat me-1"></i> Sync & Recompute Models
+            </button>
         </div>
 
         {% include "sections/simulator.html" %}
@@ -69,6 +75,7 @@
         {% include "sections/business_impact.html" %}
     </main>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
 <script>
@@ -127,11 +134,13 @@
         })
         .then(res => res.json())
         .then(data => {
+            // 1. Update All Plots
             for (let [key, b64] of Object.entries(data.plots)) {
                 let elem = document.getElementById('img_' + key);
                 if (elem) elem.src = 'data:image/png;base64,' + b64;
             }
 
+            // 2. Update Model Metric Badges & Tables
             for (let [m_key, m_val] of Object.entries(data.metrics)) {
                 ['acc', 'prec', 'rec', 'auc'].forEach(metric => {
                     let badge = document.getElementById(`m_${m_key}_${metric}`);
@@ -143,30 +152,56 @@
                 });
             }
 
+            // 3. Update Threshold Optimization Outputs
             if (document.getElementById('opt_thresh_val')) document.getElementById('opt_thresh_val').innerText = data.opt_thresh;
             if (document.getElementById('min_cost_val')) document.getElementById('min_cost_val').innerText = data.min_cost;
 
+            // 4. Update Logistic Regression Coefficients Table
             let tbodyLr = document.getElementById('tbl_lr_coefs');
             if (tbodyLr && data.lr_coefs) {
                 tbodyLr.innerHTML = '';
                 data.lr_coefs.forEach(r => {
-                    tbodyLr.innerHTML += `<tr><td>${r.Predictor}</td><td>${r.Coefficient}</td><td>${r['z-stat']}</td><td>${r['p-value']}</td><td>${r['Odds Ratio']}</td></tr>`;
+                    let isPos = parseFloat(r.Coefficient) > 0;
+                    let sigBadge = r.is_sig ? `<span class="badge bg-success">${r.p_value}</span>` : `<span class="badge bg-secondary">${r.p_value}</span>`;
+                    tbodyLr.innerHTML += `<tr>
+                        <td class="text-start fw-semibold text-dark">${r.Predictor}</td>
+                        <td class="font-monospace ${isPos ? 'text-danger' : 'text-success'} fw-bold">${r.Coefficient}</td>
+                        <td class="font-monospace text-muted">${r.z_stat}</td>
+                        <td>${sigBadge}</td>
+                        <td class="font-monospace fw-bold text-primary">${r.odds_ratio}</td>
+                    </tr>`;
                 });
             }
 
+            // 5. Update Customer Behavioral Clusters Table
             let tbodyCustClust = document.getElementById('tbl_cust_clusters');
             if (tbodyCustClust && data.cust_clusters) {
                 tbodyCustClust.innerHTML = '';
                 data.cust_clusters.forEach(c => {
-                    tbodyCustClust.innerHTML += `<tr><td>${c.Segment}</td><td>${c['Customer Count']}</td><td><strong>${c['Abuse Rate']}</strong></td><td>${parseFloat(c['Avg Prior Returns']).toFixed(2)}</td><td>${parseFloat(c['Lifetime Return Rate']).toFixed(2)}</td></tr>`;
+                    let badgeClass = c.Segment.includes('Abusers') ? 'bg-danger' : (c.Segment.includes('Moderate') ? 'bg-warning text-dark' : 'bg-success');
+                    tbodyCustClust.innerHTML += `<tr>
+                        <td class="text-start fw-semibold">${c.Segment}</td>
+                        <td>${c['Customer Count']}</td>
+                        <td><span class="badge ${badgeClass}">${c['Abuse Rate']}</span></td>
+                        <td>${parseFloat(c['Avg Prior Returns']).toFixed(2)}</td>
+                        <td>${parseFloat(c['Lifetime Return Rate']).toFixed(2)}</td>
+                    </tr>`;
                 });
             }
 
+            // 6. Update Product / Order Dynamics Clusters Table
             let tbodyProdClust = document.getElementById('tbl_prod_clusters');
             if (tbodyProdClust && data.prod_clusters) {
                 tbodyProdClust.innerHTML = '';
                 data.prod_clusters.forEach(c => {
-                    tbodyProdClust.innerHTML += `<tr><td>${c.Segment}</td><td>${c['Product Count']}</td><td><strong>${c['Abuse Rate']}</strong></td><td>${parseFloat(c['Avg Order Value']).toFixed(2)}</td><td>${parseFloat(c['Avg Return Window (Days)']).toFixed(1)}</td></tr>`;
+                    let badgeClass = c.Segment.includes('Wardrobing') ? 'bg-danger' : (c.Segment.includes('Fit') ? 'bg-info text-dark' : 'bg-primary');
+                    tbodyProdClust.innerHTML += `<tr>
+                        <td class="text-start fw-semibold">${c.Segment}</td>
+                        <td>${c['Product Count']}</td>
+                        <td><span class="badge ${badgeClass}">${c['Abuse Rate']}</span></td>
+                        <td>${c['Avg Order Value']}</td>
+                        <td>${c['Avg Return Window (Days)']}</td>
+                    </tr>`;
                 });
             }
         })

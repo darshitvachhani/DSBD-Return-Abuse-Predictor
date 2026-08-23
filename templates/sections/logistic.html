@@ -1,15 +1,18 @@
-<section id="sec-logistic" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-calculator text-primary me-2"></i> 4. Logistic Regression Modeling</div>
+<section id="sec-lr" class="section-card nav-anchor">
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-activity text-primary me-2"></i> 4. Logistic Regression Modeling</span>
+        <span class="badge bg-primary">Parametric Baseline</span>
+    </div>
     <div class="p-3">
-        <!-- Row 1: Code Box & Metrics Table -->
-        <div class="row g-3 mb-3">
+        <!-- Top Row: Python Pipeline Code & Evaluation Metrics -->
+        <div class="row g-3 align-items-stretch mb-3">
             <div class="col-lg-6">
-                <div class="code-box h-100">
-<pre><code class="language-python"># Multivariate Logistic Regression with Statsmodels
+                <div class="code-box h-100 p-3">
+<pre class="mb-0"><code class="language-python"># Multivariate Logistic Regression with Statsmodels
 import statsmodels.api as sm
 
 X_train_sm = sm.add_constant(X_train_scaled)
-X_test_sm = sm.add_constant(X_test_scaled)
+X_test_sm  = sm.add_constant(X_test_scaled)
 
 logit_model = sm.Logit(y_train, X_train_sm).fit(disp=False)
 y_prob_lr = logit_model.predict(X_test_sm)
@@ -17,57 +20,71 @@ y_pred_lr = (y_prob_lr >= lr_thresh).astype(int)
 </code></pre>
                 </div>
             </div>
+            
             <div class="col-lg-6">
                 <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
-                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-speedometer2 text-primary me-2"></i>Model Evaluation Metrics</h6>
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered text-center align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Accuracy</th>
-                                    <th>Precision</th>
-                                    <th>Recall</th>
-                                    <th>AUC</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="fw-bold">
-                                    <td><span class="badge bg-primary px-3 py-2 fs-6" id="m_lr_acc">{{ data.metrics.lr.acc }}</span></td>
-                                    <td><span class="badge bg-success px-3 py-2 fs-6" id="m_lr_prec">{{ data.metrics.lr.prec }}</span></td>
-                                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6" id="m_lr_rec">{{ data.metrics.lr.rec }}</span></td>
-                                    <td><span class="badge bg-info text-dark px-3 py-2 fs-6" id="m_lr_auc">{{ data.metrics.lr.auc }}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-speedometer2 text-primary me-2"></i>Model Evaluation Metrics</h6>
+                    <div class="row g-2 text-center">
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Accuracy</span>
+                                <span class="badge bg-primary fs-6 mt-1 w-100" id="m_lr_acc">{{ data.metrics.lr.acc }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Precision</span>
+                                <span class="badge bg-success fs-6 mt-1 w-100" id="m_lr_prec">{{ data.metrics.lr.prec }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">Recall</span>
+                                <span class="badge bg-warning text-dark fs-6 mt-1 w-100" id="m_lr_rec">{{ data.metrics.lr.rec }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <span class="text-muted small d-block" style="font-size: 0.72rem;">AUC</span>
+                                <span class="badge bg-info text-dark fs-6 mt-1 w-100" id="m_lr_auc">{{ data.metrics.lr.auc }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Row 2: Full Width Coefficients Table Below -->
+        <!-- Middle Row: Estimated Logistic Coefficients Table -->
         <div class="row g-3 mb-3">
             <div class="col-12">
                 <div class="output-box p-3">
-                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-table text-primary me-2"></i>Estimated Logistic Regression Coefficients</h6>
-                    <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
-                        <table class="table table-sm table-striped table-hover mb-0" id="tbl_lr_coefs">
-                            <thead class="table-light sticky-top">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold text-dark mb-0"><i class="bi bi-table text-primary me-2"></i>Estimated Logistic Regression Coefficients</h6>
+                        <small class="text-muted" style="font-size: 0.75rem;"><span class="badge bg-success-subtle text-success border border-success me-1">p &lt; 0.05</span> Statistically Significant</small>
+                    </div>
+                    <div class="table-responsive" style="max-height: 260px; overflow-y: auto;">
+                        <table class="table table-sm table-hover table-bordered text-center align-middle mb-0" style="font-size: 0.8rem;">
+                            <thead class="table-dark sticky-top">
                                 <tr>
-                                    <th>Predictor</th>
-                                    <th>Estimate</th>
+                                    <th class="text-start">Predictor</th>
+                                    <th>Estimate (β)</th>
                                     <th>z-stat</th>
                                     <th>p-value</th>
-                                    <th>Odds Ratio</th>
+                                    <th>Odds Ratio (e^β)</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {% for row in data.coefs %}
+                            <tbody id="tbl_lr_coefs">
+                                {% for r in data.lr_coefs %}
                                 <tr>
-                                    <td class="fw-semibold">{{ row.Predictor }}</td>
-                                    <td>{{ row.Coefficient }}</td>
-                                    <td>{{ row['z-stat'] }}</td>
-                                    <td>{{ row['p-value'] }}</td>
-                                    <td><span class="badge bg-light text-dark border">{{ row['Odds Ratio'] }}</span></td>
+                                    <td class="text-start fw-semibold text-dark">{{ r.Predictor }}</td>
+                                    <td class="font-monospace {% if r.Coefficient | float > 0 %}text-danger{% else %}text-success{% endif %} fw-bold">{{ r.Coefficient }}</td>
+                                    <td class="font-monospace text-muted">{{ r.z_stat }}</td>
+                                    <td>
+                                        <span class="badge {% if r.is_sig %}bg-success{% else %}bg-secondary{% endif %}">
+                                            {{ r.p_value }}
+                                        </span>
+                                    </td>
+                                    <td class="font-monospace fw-bold text-primary">{{ r.odds_ratio }}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -77,16 +94,16 @@ y_pred_lr = (y_prob_lr >= lr_thresh).astype(int)
             </div>
         </div>
 
-        <!-- Row 3: Sigmoid Curve (Left) & ROC Curve (Right) at Same Level -->
-        <div class="row g-3">
+        <!-- Bottom Row: Sigmoid Probability Response & ROC Curve -->
+        <div class="row g-3 align-items-stretch">
             <div class="col-lg-6">
-                <div class="output-box text-center p-2 h-100">
-                    <img id="img_sigmoid" src="data:image/png;base64,{{ data.plots.sigmoid }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Sigmoid Curve">
+                <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
+                    <img id="img_lr_sigmoid" src="data:image/png;base64,{{ data.plots.lr_sigmoid }}" class="img-fluid rounded w-100" style="max-height: 330px; object-fit: contain;" alt="Logistic Sigmoid Curve">
                 </div>
             </div>
             <div class="col-lg-6">
-                <div class="output-box text-center p-2 h-100">
-                    <img id="img_roc_lr" src="data:image/png;base64,{{ data.plots.roc_lr }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Logistic ROC Curve">
+                <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
+                    <img id="img_lr_roc" src="data:image/png;base64,{{ data.plots.lr_roc }}" class="img-fluid rounded w-100" style="max-height: 330px; object-fit: contain;" alt="Logistic ROC Curve">
                 </div>
             </div>
         </div>

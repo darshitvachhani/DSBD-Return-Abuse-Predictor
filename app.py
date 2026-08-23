@@ -39,7 +39,7 @@ def orchestrate_pipeline(params=None):
     rf_res = run_random_forest(data, n_trees=params['rf_trees'], depth=params['rf_depth'], rf_thresh=params['rf_thresh'])
     bag_res = run_bagging(data, n_trees=params['bag_trees'], depth=params['rf_depth'], bag_thresh=params['bag_thresh'])
     
-    # 3. Dual Clustering (Customer & Product)
+    # 3. Triple Clustering (Customer, Order Dynamics & Product Category Risk)
     clust_res = run_clustering(RAW_DF, NUM_COLS, n_clusters=params['n_clusters'])
     
     # 4. Cost Optimization & Multi-Model ROC
@@ -74,6 +74,7 @@ def orchestrate_pipeline(params=None):
         'lr_coefs': lr_res['coefs'],
         'cust_clusters': clust_res.get('cust_table', clust_res.get('table', [])),
         'prod_clusters': clust_res.get('prod_table', []),
+        'cat_clusters': clust_res.get('cat_table', []),
         'opt_thresh': cost_res['opt_thresh'],
         'min_cost': cost_res['min_cost'],
         'implications': implications_data,
@@ -177,8 +178,11 @@ def update_dashboard():
         'lr_coefs': updated_data['lr_coefs'],
         'cust_clusters': updated_data['cust_clusters'],
         'prod_clusters': updated_data['prod_clusters'],
+        'cat_clusters': updated_data['cat_clusters'],
         'opt_thresh': updated_data['opt_thresh'],
-        'min_cost': updated_data['min_cost']
+        'min_cost': updated_data['min_cost'],
+        'implications': updated_data.get('implications', {}),
+        'biz_impact': updated_data.get('biz_impact', {})
     }
     return jsonify(clean_data)
 

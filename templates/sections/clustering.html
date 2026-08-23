@@ -1,25 +1,26 @@
 <section id="sec-clust" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-people text-primary me-2"></i> 9. Multi-Dimensional Clustering & Behavioral Segmentation</div>
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-people text-primary me-2"></i> 10. Multi-Dimensional Clustering & Segmentation</span>
+        <span class="badge bg-secondary">Unsupervised K-Means</span>
+    </div>
     <div class="p-3">
         
-        <!-- SECTION PART 1: CUSTOMER BEHAVIOR SEGMENTATION -->
+        <!-- SECTION 1: CUSTOMER BEHAVIOR SEGMENTATION -->
         <div class="mb-4">
             <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
                 <i class="bi bi-person-badge text-primary me-2"></i>A. Customer Behavioral Profiles (Returns Frequency vs. Lifetime Rate)
             </h6>
             <div class="row g-3 align-items-stretch">
-                <!-- Left: Decision Boundary Scatter Plot -->
                 <div class="col-lg-6">
                     <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
-                        <img id="img_cust_cluster" src="data:image/png;base64,{{ data.plots.cust_cluster }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Customer Clusters">
+                        <img id="img_cust_cluster" src="data:image/png;base64,{{ data.plots.cust_cluster }}" class="img-fluid rounded w-100" style="height: 330px; object-fit: contain;" alt="Customer Clusters">
                     </div>
                 </div>
                 
-                <!-- Right: Profile Summary Table & Key Implications -->
                 <div class="col-lg-6">
                     <div class="output-box h-100 d-flex flex-column justify-content-between p-3">
                         <div>
-                            <h6 class="fw-bold text-dark mb-2" style="font-size: 0.88rem;">Customer Segment Distribution</h6>
+                            <h6 class="fw-bold text-dark mb-2" style="font-size: 0.88rem;">Customer Profile Distribution</h6>
                             <div class="table-responsive mb-2">
                                 <table class="table table-sm table-bordered text-center align-middle mb-0" style="font-size: 0.78rem;">
                                     <thead class="table-light">
@@ -46,11 +47,10 @@
                             </div>
                         </div>
 
-                        <!-- Behavioral Implications Box -->
                         <div class="p-2 rounded bg-light border">
-                            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;"><i class="bi bi-exclamation-triangle text-danger me-1"></i>Risk Implications</h6>
+                            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;"><i class="bi bi-shield-exclamation text-danger me-1"></i>Behavioral Takeaway</h6>
                             <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.45;">
-                                <strong>High-Risk Cluster:</strong> Marked by elevated consecutive returns (>4.0) and high lifetime return velocity (>0.60). Represents severe recurring friction and intentional bracketed purchases. Recommend strict identity matching and prepaid label restrictions.
+                                High-velocity clusters demonstrate repetitive return cycles. Require account-level authentication and dynamic return fees on subsequent orders.
                             </p>
                         </div>
                     </div>
@@ -58,24 +58,22 @@
             </div>
         </div>
 
-        <!-- SECTION PART 2: PRODUCT / ORDER DYNAMICS SEGMENTATION -->
-        <div>
+        <!-- SECTION 2: ORDER & BASKET DYNAMICS SEGMENTATION -->
+        <div class="mb-4">
             <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
-                <i class="bi bi-box-seam text-primary me-2"></i>B. Product & Order Dynamics (Basket Value vs. Days to Return)
+                <i class="bi bi-cart-check text-primary me-2"></i>B. Order & Basket Dynamics (Basket Value vs. Days to Return)
             </h6>
             <div class="row g-3 align-items-stretch">
-                <!-- Left: Decision Boundary Scatter Plot -->
                 <div class="col-lg-6">
                     <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
-                        <img id="img_prod_cluster" src="data:image/png;base64,{{ data.plots.prod_cluster }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Product Dynamics Clusters">
+                        <img id="img_prod_cluster" src="data:image/png;base64,{{ data.plots.prod_cluster }}" class="img-fluid rounded w-100" style="height: 330px; object-fit: contain;" alt="Order Dynamics Clusters">
                     </div>
                 </div>
                 
-                <!-- Right: Profile Summary Table & Key Implications -->
                 <div class="col-lg-6">
                     <div class="output-box h-100 d-flex flex-column justify-content-between p-3">
                         <div>
-                            <h6 class="fw-bold text-dark mb-2" style="font-size: 0.88rem;">Order Velocity & Value Segment Profiles</h6>
+                            <h6 class="fw-bold text-dark mb-2" style="font-size: 0.88rem;">Order Value & Velocity Profiles</h6>
                             <div class="table-responsive mb-2">
                                 <table class="table table-sm table-bordered text-center align-middle mb-0" style="font-size: 0.78rem;">
                                     <thead class="table-light">
@@ -83,7 +81,7 @@
                                             <th class="text-start">Segment Name</th>
                                             <th>Orders</th>
                                             <th>Abuse %</th>
-                                            <th>Avg Order Val</th>
+                                            <th>Avg Basket</th>
                                             <th>Avg Window</th>
                                         </tr>
                                     </thead>
@@ -92,7 +90,7 @@
                                         <tr>
                                             <td class="text-start fw-semibold">{{ p.Segment }}</td>
                                             <td>{{ p['Product Count'] }}</td>
-                                            <td><span class="badge {% if 'Wardrobing' in p.Segment %}bg-danger{% elif 'Fit' in p.Segment %}bg-info text-dark{% else %}bg-primary{% endif %}">{{ p['Abuse Rate'] }}</span></td>
+                                            <td><span class="badge {% if 'Wardrobing' in p.Segment %}bg-danger{% elif 'Rapid' in p.Segment %}bg-info text-dark{% else %}bg-primary{% endif %}">{{ p['Abuse Rate'] }}</span></td>
                                             <td>{{ p['Avg Order Value'] }}</td>
                                             <td>{{ p['Avg Return Window (Days)'] }}</td>
                                         </tr>
@@ -102,11 +100,63 @@
                             </div>
                         </div>
 
-                        <!-- Product Implications Box -->
                         <div class="p-2 rounded bg-light border">
-                            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;"><i class="bi bi-shield-lock text-warning me-1"></i>Merchandising Implications</h6>
+                            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;"><i class="bi bi-hourglass-split text-warning me-1"></i>Window Takeaway</h6>
                             <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.45;">
-                                <strong>High-Ticket / Delayed Window:</strong> Orders with basket sizes >£150 returned near the 30-day limit exhibit the highest correlation with wardrobing and worn-item fraud. Enforce mandatory tamper-evident 360-degree security tags on these item groups.
+                                Late return windows correlated with high basket values represent primary wardrobing risk. Shorten standard window for unverified profiles from 30 to 14 days.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: PRODUCT CATEGORY RISK SEGMENTATION -->
+        <div>
+            <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">
+                <i class="bi bi-tags text-primary me-2"></i>C. Product Category & Merchandising Risk (Price vs. Discount Intensity)
+            </h6>
+            <div class="row g-3 align-items-stretch">
+                <div class="col-lg-6">
+                    <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
+                        <img id="img_cat_cluster" src="data:image/png;base64,{{ data.plots.cat_cluster }}" class="img-fluid rounded w-100" style="height: 330px; object-fit: contain;" alt="Category Clusters">
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="output-box h-100 d-flex flex-column justify-content-between p-3">
+                        <div>
+                            <h6 class="fw-bold text-dark mb-2" style="font-size: 0.88rem;">Merchandise Risk Distribution</h6>
+                            <div class="table-responsive mb-2">
+                                <table class="table table-sm table-bordered text-center align-middle mb-0" style="font-size: 0.78rem;">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th class="text-start">Category Segment</th>
+                                            <th>SKUs</th>
+                                            <th>Abuse %</th>
+                                            <th>Avg Price</th>
+                                            <th>Avg Discount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbl_cat_clusters">
+                                        {% for k in data.cat_clusters %}
+                                        <tr>
+                                            <td class="text-start fw-semibold">{{ k.Segment }}</td>
+                                            <td>{{ k['Item Count'] }}</td>
+                                            <td><span class="badge {% if 'Premium' in k.Segment %}bg-danger{% elif 'Clearance' in k.Segment %}bg-warning text-dark{% else %}bg-success{% endif %}">{{ k['Abuse Rate'] }}</span></td>
+                                            <td>{{ k['Avg Price'] }}</td>
+                                            <td>{{ k['Avg Discount'] }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="p-2 rounded bg-light border">
+                            <h6 class="fw-bold text-dark mb-1" style="font-size: 0.8rem;"><i class="bi bi-tag-fill text-info me-1"></i>Merchandising Takeaway</h6>
+                            <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.45;">
+                                Premium price tiers exhibit higher return friction. Implement 360-degree security tags on items &gt;£100 and enforce "Final Sale / Store Credit Only" on clearance lines with discounts &gt;40%.
                             </p>
                         </div>
                     </div>
