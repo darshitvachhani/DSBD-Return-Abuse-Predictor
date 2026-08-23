@@ -22,7 +22,7 @@ def run_bagging(data_bundle, n_trees=60, depth=8, bag_thresh=0.50, seed=42):
     metrics = calc_metrics(y_te, y_pred, y_prob)
 
     # 1. Representative Bootstrap Tree (First Estimator Subtree)
-    fig_t, ax_t = plt.subplots(figsize=(10, 4.4))
+    fig_t, ax_t = plt.subplots(figsize=(10, 6.4))
     plot_tree(bag.estimators_[0], feature_names=X_tr.columns.tolist(), class_names=['Legit', 'Abuse'],
               max_depth=3, filled=True, rounded=True, precision=2, fontsize=8, impurity=False, proportion=True, ax=ax_t)
     ax_t.set_title("Bagging: Representative Bootstrap Tree (Top Splits)", fontsize=10, fontweight='bold')

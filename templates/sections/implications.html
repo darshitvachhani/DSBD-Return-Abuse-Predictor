@@ -1,0 +1,113 @@
+<section id="sec-implications" class="section-card nav-anchor">
+    <div class="section-header">
+        <i class="bi bi-lightbulb text-primary me-2"></i> 9. Model Implications & Analytical Synthesis
+    </div>
+    <div class="p-3">
+        
+        <!-- Top Row: Best Model Highlight Banner -->
+        <div class="alert alert-primary p-3 mb-3 border-0 shadow-sm">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="fw-bold text-dark mb-1">
+                        <i class="bi bi-trophy-fill text-warning me-2"></i>Primary Champion Model: Bagging Ensemble
+                    </h5>
+                    <p class="small text-muted mb-0">
+                        Across all evaluated algorithms, the <strong>Bootstrap Aggregated (Bagging) Classifier</strong> demonstrated superior generalization on unseen holdout test data, outperforming standard decision trees and parametric logistic regression.
+                    </p>
+                </div>
+                <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                    <span class="badge bg-dark fs-6 px-3 py-2">Test AUC: {{ data.metrics.bag.auc }}</span>
+                    <span class="badge bg-success fs-6 px-3 py-2">Accuracy: {{ data.metrics.bag.acc }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: Key Metric Analysis Cards -->
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-primary border-3">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Accuracy</span>
+                    <h4 class="fw-bold text-primary mb-1">{{ data.metrics.bag.acc }}</h4>
+                    <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                        High baseline classification across the full customer cohort, confirming strong separation between normal shoppers and serial abusers.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-info border-3">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Area Under ROC (AUC)</span>
+                    <h4 class="fw-bold text-info mb-1">{{ data.metrics.bag.auc }}</h4>
+                    <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                        Reflects high ranking power: the model reliably scores true abusers higher than legitimate customers across varying classification thresholds.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-success border-3">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Precision</span>
+                    <h4 class="fw-bold text-success mb-1">{{ data.metrics.bag.prec }}</h4>
+                    <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                        When an order is flagged as abusive, this metric guarantees minimal false accusations, preserving core customer trust and loyalty.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-warning border-3">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Recall</span>
+                    <h4 class="fw-bold text-warning mb-1">{{ data.metrics.bag.rec }}</h4>
+                    <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                        The proportion of actual return fraud successfully intercepted before automated refunds or merchant restocking costs are triggered.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Detailed Implications Narrative -->
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="p-3 rounded bg-light border h-100">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-sliders text-primary me-2"></i>1. Threshold Calibration & Trade-Off Dynamics
+                    </h6>
+                    <p class="small text-muted mb-2" style="font-size: 0.8rem; line-height: 1.5;">
+                        Standard machine learning setups apply an arbitrary 0.50 cutoff. In retail operations, this is sub-optimal:
+                    </p>
+                    <ul class="small text-muted ps-3 mb-0" style="font-size: 0.78rem; line-height: 1.55;">
+                        <li class="mb-1">
+                            <strong>Lowering the cutoff (&lt; 0.50):</strong> Catches more fraudulent returns (higher Recall) but increases wrongful friction on regular shoppers (more False Positives).
+                        </li>
+                        <li class="mb-1">
+                            <strong>Raising the cutoff (&gt; 0.50):</strong> Eliminates friction for prime customers (higher Precision) but permits sophisticated abusers to exploit free returns (more False Negatives).
+                        </li>
+                        <li>
+                            <strong>Optimal Policy:</strong> Operating at the cost-tuned threshold of <strong>t* = {{ data.opt_thresh }}</strong> balances these penalties to minimize total operational loss.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="p-3 rounded bg-light border h-100">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-graph-up text-primary me-2"></i>2. Feature Drivers & Behavioral Takeaways
+                    </h6>
+                    <p class="small text-muted mb-2" style="font-size: 0.8rem; line-height: 1.5;">
+                        Tree-based feature importance consistently highlights three dominant operational risk factors:
+                    </p>
+                    <ul class="small text-muted ps-3 mb-0" style="font-size: 0.78rem; line-height: 1.55;">
+                        <li class="mb-1">
+                            <strong>Consecutive Prior Returns:</strong> The single strongest predictor of abuse. Customers exceeding 3–4 back-to-back returns display systemic bracketing or wardrobing behavior.
+                        </li>
+                        <li class="mb-1">
+                            <strong>Order Value & Return Delay:</strong> High basket totals returned near the end of the return window represent significant inventory depreciation risks.
+                        </li>
+                        <li>
+                            <strong>Unstructured Reasons:</strong> Vague text descriptions combined with high return velocity serve as an early indicator of return abuse.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

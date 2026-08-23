@@ -1,28 +1,87 @@
 <section id="sec-cost" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-cash-stack text-primary me-2"></i> 9. Cost-Sensitive Threshold Optimisation</div>
+    <div class="section-header"><i class="bi bi-cash-stack text-primary me-2"></i> 10. Cost-Sensitive Threshold Optimisation</div>
     <div class="p-3">
-        <div class="row g-3">
+        <!-- Top Row: Metric Cards & Cost Curve -->
+        <div class="row g-3 align-items-stretch mb-3">
+            <!-- Left: Cost Summary Panel -->
             <div class="col-lg-6">
-                <div class="output-box">
-                    <!--<div class="control-panel">
-                        <div class="row g-2 mb-2">
-                            <div class="col-6">
-                                <label class="form-label small fw-bold d-flex justify-content-between mb-1"><span>Cost FP:</span> <span id="lbl_c_fp" class="badge bg-primary">£50</span></label>
-                                <input type="range" class="form-range" id="input_c_fp" min="10" max="150" step="10" value="50" oninput="document.getElementById('lbl_c_fp').innerText = '£'+this.value; triggerUpdate();">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label small fw-bold d-flex justify-content-between mb-1"><span>Cost FN:</span> <span id="lbl_c_fn" class="badge bg-primary">£25</span></label>
-                                <input type="range" class="form-range" id="input_c_fn" min="10" max="100" step="5" value="25" oninput="document.getElementById('lbl_c_fn').innerText = '£'+this.value; triggerUpdate();">
+                <div class="output-box h-100 d-flex flex-column justify-content-between p-3">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-2"><i class="bi bi-bullseye text-primary me-2"></i>Optimal Cutoff Determination</h6>
+                        <div class="alert alert-warning py-3 px-3 mb-3 shadow-sm border-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="text-muted small d-block">Optimal Decision Cutoff (t*)</span>
+                                    <h4 class="fw-bold mb-0 text-dark" id="opt_thresh_val">{{ data.opt_thresh }}</h4>
+                                </div>
+                                <div class="text-end">
+                                    <span class="text-muted small d-block">Min. Expected Financial Loss</span>
+                                    <h4 class="fw-bold mb-0 text-danger" id="min_cost_val">{{ data.min_cost }}</h4>
+                                </div>
                             </div>
                         </div>
-                    </div>-->
-                    <div class="alert alert-warning py-2 mb-0" style="font-size: 0.8rem;">
-                        <strong>Optimal Cutoff ($t^*$):</strong> <span id="opt_thresh_val" class="fw-bold">{{ data.opt_thresh }}</span> | <strong>Min Expected Cost:</strong> <span id="min_cost_val" class="fw-bold">{{ data.min_cost }}</span>
+                    </div>
+
+                    <!-- Cost Parameter Metric Summary -->
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered text-center align-middle mb-0" style="font-size: 0.8rem;">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Metric Parameter</th>
+                                    <th>Assigned Penalty</th>
+                                    <th>Business Impact Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="fw-semibold text-start">False Positive (C_FP)</td>
+                                    <td><span class="badge bg-danger">£50.00</span></td>
+                                    <td class="text-start small">Customer friction, customer support escalation & goodwill churn</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-semibold text-start">False Negative (C_FN)</td>
+                                    <td><span class="badge bg-warning text-dark">£25.00</span></td>
+                                    <td class="text-start small">Direct inventory write-down, unrecovered restocking & freight loss</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            <!-- Right: Interactive Cost Curve Plot -->
             <div class="col-lg-6">
-                <div class="output-box text-center"><img id="img_cost_curve" src="data:image/png;base64,{{ data.plots.cost_curve }}" class="img-fluid rounded" alt="Cost Curve"></div>
+                <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
+                    <img id="img_cost_curve" src="data:image/png;base64,{{ data.plots.cost_curve }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Cost Optimization Curve">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Detailed Calculation Methodology & Asymmetric Cost Assumptions -->
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="p-3 rounded bg-light border">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-calculator-fill text-primary me-2"></i>Cost Optimization Formula & Core Assumptions</h6>
+                    <div class="row g-3">
+                        <div class="col-lg-6">
+                            <p class="small text-muted mb-2">
+                                <strong>1. Calculation Methodology:</strong> Standard classification defaults to a 0.50 probability cutoff, which implicitly treats False Positives and False Negatives as equally costly. In commercial operations, misclassifications carry asymmetric penalties. The optimal cutoff <strong>t*</strong> is computed by iterating threshold <code>t ∈ [0.05, 0.95]</code> to minimize total loss:
+                            </p>
+                            <div class="p-2 rounded bg-white border text-center font-monospace small mb-0">
+                                <strong>Expected Total Loss(t) = (C_FP × FP(t)) + (C_FN × FN(t))</strong>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <p class="small text-muted mb-1">
+                                <strong>2. Operational Cost Assumptions:</strong>
+                            </p>
+                            <ul class="small text-muted ps-3 mb-0" style="line-height: 1.5;">
+                                <li><strong>False Positive (£50.00 Penalty):</strong> Wrongfully inspecting or rejecting a legitimate customer creates support tickets (£15/ticket) and long-term lifetime customer churn risk (£35 amortized).</li>
+                                <li><strong>False Negative (£25.00 Penalty):</strong> Failing to flag an abusive return results in unrecoverable two-way shipping (£7.00), warehouse item inspection (£6.00), and retail depreciation (£12.00).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

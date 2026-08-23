@@ -1,37 +1,44 @@
 <section id="sec-nlp" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-chat-left-text text-primary me-2"></i> 2. Text Analytics</div>
+    <div class="section-header"><i class="bi bi-chat-left-text text-primary me-2"></i> 3. Text Analytics</div>
     <div class="p-3">
-        <div class="row g-3">
-            <!-- Left: Code Box -->
+        <!-- Row 1: Code Box (Left) & Strategy Text (Right) -->
+        <div class="row g-3 align-items-stretch mb-3">
             <div class="col-lg-6">
-                <div class="code-box">
-                    <pre>
-                        <code class="language-python"># Unstructured Text Vectorization Pipeline (Leakage-Free)
-                            from sklearn.feature_extraction.text import TfidfVectorizer
-                            import re
+                <div class="code-box h-100">
+<pre><code class="language-python"># Unstructured Text Vectorization Pipeline (Leakage-Free)
+from sklearn.feature_extraction.text import TfidfVectorizer
+import re
 
-                            # 1. Fit TF-IDF Vectorizer ONLY on Training Set
-                            tfidf = TfidfVectorizer(max_features=4, stop_words='english')
-                            X_train_text = tfidf.fit_transform(train_df['Free text return reason'])
+# 1. Fit TF-IDF Vectorizer ONLY on Training Set
+tfidf = TfidfVectorizer(max_features=4, stop_words='english')
+X_train_text = tfidf.fit_transform(train_df['Free text return reason'])
 
-                            # 2. Transform Test Partition using Learned Training Vocabulary
-                            X_test_text = tfidf.transform(test_df['Free text return reason'])
-                            tfidf_features = tfidf.get_feature_names_out()
-                        </code>
-                    </pre>
+# 2. Transform Test Partition using Learned Training Vocabulary
+X_test_text = tfidf.transform(test_df['Free text return reason'])
+tfidf_features = tfidf.get_feature_names_out()
+</code></pre>
                 </div>
-                <div class="output-box mt-2">
-                    <h6 class="fw-bold text-dark mb-1">Text Processing Strategy</h6>
-                    <p class="small text-muted mb-0">
-                        Customer return reasons provide critical behavioral context. TF-IDF transforms unstructured free-text narratives into sparse numeric features strictly within the training boundary to prevent data leakage.
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-info-circle text-primary me-2"></i>Text Processing Strategy</h6>
+                    <p class="text-muted mb-0" style="font-size: 0.9rem; line-height: 1.6;">
+                        Customer return reasons provide critical behavioral context. TF-IDF transforms unstructured free-text narratives into sparse numeric features strictly within the training boundary to prevent data leakage across partitions.
                     </p>
                 </div>
             </div>
-            <!-- Right: Text Analytics Visualizations -->
+        </div>
+
+        <!-- Row 2: Word Cloud (Left) & Term Frequency Chart (Right) at Same Level & Size -->
+        <div class="row g-3 align-items-stretch">
             <div class="col-lg-6">
-                <div class="output-box text-center">
-                    <img id="img_wordcloud" src="data:image/png;base64,{{ data.plots.wordcloud }}" class="img-fluid rounded mb-2" alt="Word Cloud">
-                    <img id="img_text_freq" src="data:image/png;base64,{{ data.plots.text_freq }}" class="img-fluid rounded" alt="Term Frequency Chart">
+                <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
+                    <img id="img_wordcloud" src="data:image/png;base64,{{ data.plots.wordcloud }}" class="img-fluid rounded w-100" style="max-height: 350px; object-fit: contain;" alt="Word Cloud">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box h-100 d-flex align-items-center justify-content-center p-2 text-center">
+                    <img id="img_text_freq" src="data:image/png;base64,{{ data.plots.text_freq }}" class="img-fluid rounded w-100" style="max-height: 350px; object-fit: contain;" alt="Term Frequency Chart">
                 </div>
             </div>
         </div>

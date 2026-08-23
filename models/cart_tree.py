@@ -16,25 +16,26 @@ def run_cart(data_bundle, max_depth=3, cart_thresh=0.50, seed=42):
     y_pred = (y_prob >= cart_thresh).astype(int)
     metrics = calc_metrics(y_te, y_pred, y_prob)
 
-    # 1. Full Decision Tree Diagram
-    fig_t, ax = plt.subplots(figsize=(10, 4.4))
+    # 1. Full Decision Tree Diagram (Wide Aspect for Row 2)
+    fig_t, ax = plt.subplots(figsize=(16, 6.5))
     plot_tree(cart, feature_names=X_tr.columns.tolist(), class_names=['Legit', 'Abuse'],
-              filled=True, rounded=True, precision=2, fontsize=8, impurity=False, proportion=True, ax=ax)
-    ax.set_title(f"Pruned Classification Tree (Max Depth = {max_depth})", fontsize=10, fontweight='bold')
+              filled=True, rounded=True, precision=2, fontsize=9, impurity=False, proportion=True, ax=ax)
+    ax.set_title(f"Pruned Classification Tree (Max Depth = {max_depth})", fontsize=11, fontweight='bold')
     tree_b64 = fig_to_base64(fig_t)
 
-    # 2. CART Gini Feature Importance Plot
-    fig_i, ax_i = plt.subplots(figsize=(6, 3.2))
+    # 2. CART Gini Feature Importance Plot (Row 3 Left)
+    fig_i, ax_i = plt.subplots(figsize=(6, 3.8))
     pd.Series(cart.feature_importances_, index=X_tr.columns).sort_values().tail(8).plot(
         kind='barh', color='#ff7f0e', edgecolor='black', ax=ax_i
     )
     ax_i.set_title("CART: Top Gini Feature Importances", fontsize=10, fontweight='bold')
     ax_i.set_xlabel("Gini Importance Score")
     ax_i.grid(axis='x', linestyle=':', alpha=0.6)
+    plt.tight_layout()
     cart_imp_b64 = fig_to_base64(fig_i)
 
-    # 3. CART ROC Curve
-    fig_r, ax_r = plt.subplots(figsize=(5.5, 3.2))
+    # 3. CART ROC Curve (Row 3 Right - Matching Height & Width)
+    fig_r, ax_r = plt.subplots(figsize=(6, 3.8))
     fpr, tpr, _ = roc_curve(y_te, y_prob)
     ax_r.plot(fpr, tpr, color='#ff7f0e', lw=2, label=f"AUC = {roc_auc_score(y_te, y_prob):.4f}")
     ax_r.plot([0, 1], [0, 1], 'k--', lw=1)
@@ -43,6 +44,7 @@ def run_cart(data_bundle, max_depth=3, cart_thresh=0.50, seed=42):
     ax_r.set_title("CART Decision Tree ROC Curve", fontsize=10, fontweight='bold')
     ax_r.legend(loc='lower right', fontsize=8)
     ax_r.grid(True, linestyle=':', alpha=0.6)
+    plt.tight_layout()
     roc_b64 = fig_to_base64(fig_r)
 
     return {

@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
     <style>
         body { background-color: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #1e293b; }
-        .sidebar { background: #0f172a; min-height: 100vh; color: #fff; z-index: 1000; width: 240px; }
-        .sidebar .nav-link { color: #94a3b8; font-size: 0.84rem; font-weight: 500; border-radius: 6px; margin-bottom: 4px; padding: 7px 10px; }
+        .sidebar { background: #0f172a; min-height: 100vh; color: #fff; z-index: 1000; width: 260px; overflow-y: auto; }
+        .sidebar .nav-link { color: #94a3b8; font-size: 0.82rem; font-weight: 500; border-radius: 6px; margin-bottom: 4px; padding: 7px 10px; }
         .sidebar .nav-link:hover, .sidebar .nav-link.active { color: #fff; background: #334155; }
-        .main-container { margin-left: 240px; padding: 25px 35px; }
+        .main-container { margin-left: 260px; padding: 25px 35px; }
         .section-card { background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06); margin-bottom: 35px; border: 1px solid #e2e8f0; overflow: hidden; }
         .section-header { background: #f8fafc; padding: 12px 20px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #0f172a; }
         .code-box { background: #282c34; border-radius: 8px; padding: 12px; font-size: 0.76rem; max-height: 380px; overflow-y: auto; }
@@ -37,17 +37,19 @@
             <li class="nav-item"><a class="nav-link" href="#sec-lr"><i class="bi bi-activity me-2"></i> 4. Logistic Regression</a></li>
             <li class="nav-item"><a class="nav-link" href="#sec-cart"><i class="bi bi-diagram-3 me-2"></i> 5. Classification Tree</a></li>
             <li class="nav-item"><a class="nav-link" href="#sec-rf"><i class="bi bi-tree me-2"></i> 6. Random Forest</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-bag"><i class="bi bi-collection me-2"></i> 7. Bagging Classifier</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-bag"><i class="bi bi-collection me-2"></i> 7. Bagging</a></li>
             <li class="nav-item"><a class="nav-link" href="#sec-comp"><i class="bi bi-table me-2"></i> 8. Model Benchmark</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-clust"><i class="bi bi-people me-2"></i> 9. Customer Segments</a></li>
-            <li class="nav-item"><a class="nav-link" href="#sec-cost"><i class="bi bi-cash-stack me-2"></i> 10. Cost Optimization</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-implications"><i class="bi bi-lightbulb text-info me-2"></i> 9. Model Implications</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-clust"><i class="bi bi-people me-2"></i> 10. Segmentation & Clustering</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-cost"><i class="bi bi-cash-stack me-2"></i> 11. Cost Optimization</a></li>
+            <li class="nav-item"><a class="nav-link" href="#sec-strategy"><i class="bi bi-graph-up-arrow text-success me-2"></i> 12. Business Impact & Policy</a></li>
         </ul>
     </nav>
     <main class="main-container">
         <div class="d-flex justify-content-between align-items-center pb-3 mb-4 border-bottom">
             <div>
                 <h3 class="fw-bold mb-1">Return Abuse Detection & Behavioral Analytics</h3>
-                <p class="text-muted small mb-0">Modular Localhost Workbench (50/50 Code & Visual Breakdown)</p>
+                <p class="text-muted small mb-0">End-to-End Enterprise Risk Scoring, Segmentation & Policy Optimization</p>
             </div>
             <button class="btn btn-primary btn-sm fw-bold px-3" onclick="triggerUpdate()"><i class="bi bi-arrow-repeat me-1"></i> Sync & Recompute Models</button>
         </div>
@@ -61,8 +63,10 @@
         {% include "sections/random_forest.html" %}
         {% include "sections/bagging.html" %}
         {% include "sections/benchmark.html" %}
+        {% include "sections/implications.html" %}
         {% include "sections/clustering.html" %}
         {% include "sections/cost.html" %}
+        {% include "sections/business_impact.html" %}
     </main>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -102,18 +106,18 @@
 
     function triggerUpdate() {
         const payload = {
-            test_size: parseFloat(document.getElementById('input_test_size').value),
-            lr_thresh: parseFloat(document.getElementById('input_lr_thresh').value),
-            cart_depth: parseInt(document.getElementById('input_cart_depth').value),
-            cart_thresh: parseFloat(document.getElementById('input_cart_thresh').value),
-            rf_trees: parseInt(document.getElementById('input_rf_trees').value),
+            test_size: parseFloat(document.getElementById('input_test_size') ? document.getElementById('input_test_size').value : 0.20),
+            lr_thresh: parseFloat(document.getElementById('input_lr_thresh') ? document.getElementById('input_lr_thresh').value : 0.50),
+            cart_depth: parseInt(document.getElementById('input_cart_depth') ? document.getElementById('input_cart_depth').value : 3),
+            cart_thresh: parseFloat(document.getElementById('input_cart_thresh') ? document.getElementById('input_cart_thresh').value : 0.50),
+            rf_trees: parseInt(document.getElementById('input_rf_trees') ? document.getElementById('input_rf_trees').value : 100),
             rf_depth: 8,
-            rf_thresh: parseFloat(document.getElementById('input_rf_thresh').value),
-            bag_trees: parseInt(document.getElementById('input_bag_trees').value),
-            bag_thresh: parseFloat(document.getElementById('input_bag_thresh').value),
-            n_clusters: parseInt(document.getElementById('input_n_clusters').value),
-            c_fp: parseFloat(document.getElementById('input_c_fp').value),
-            c_fn: parseFloat(document.getElementById('input_c_fn').value)
+            rf_thresh: parseFloat(document.getElementById('input_rf_thresh') ? document.getElementById('input_rf_thresh').value : 0.50),
+            bag_trees: parseInt(document.getElementById('input_bag_trees') ? document.getElementById('input_bag_trees').value : 60),
+            bag_thresh: parseFloat(document.getElementById('input_bag_thresh') ? document.getElementById('input_bag_thresh').value : 0.50),
+            n_clusters: parseInt(document.getElementById('input_n_clusters') ? document.getElementById('input_n_clusters').value : 3),
+            c_fp: parseFloat(document.getElementById('input_c_fp') ? document.getElementById('input_c_fp').value : 50.0),
+            c_fn: parseFloat(document.getElementById('input_c_fn') ? document.getElementById('input_c_fn').value : 25.0)
         };
 
         fetch('/api/update', {
@@ -139,8 +143,8 @@
                 });
             }
 
-            document.getElementById('opt_thresh_val').innerText = data.opt_thresh;
-            document.getElementById('min_cost_val').innerText = data.min_cost;
+            if (document.getElementById('opt_thresh_val')) document.getElementById('opt_thresh_val').innerText = data.opt_thresh;
+            if (document.getElementById('min_cost_val')) document.getElementById('min_cost_val').innerText = data.min_cost;
 
             let tbodyLr = document.getElementById('tbl_lr_coefs');
             if (tbodyLr && data.lr_coefs) {
@@ -150,11 +154,19 @@
                 });
             }
 
-            let tbodyClust = document.getElementById('tbl_clusters');
-            if (tbodyClust && data.clusters) {
-                tbodyClust.innerHTML = '';
-                data.clusters.forEach(c => {
-                    tbodyClust.innerHTML += `<tr><td>${c.Segment}</td><td>${c['Customer Count']}</td><td><strong>${c['Abuse Rate']}</strong></td><td>${parseFloat(c['Avg Prior Returns']).toFixed(2)}</td><td>${parseFloat(c['Lifetime Return Rate']).toFixed(2)}</td></tr>`;
+            let tbodyCustClust = document.getElementById('tbl_cust_clusters');
+            if (tbodyCustClust && data.cust_clusters) {
+                tbodyCustClust.innerHTML = '';
+                data.cust_clusters.forEach(c => {
+                    tbodyCustClust.innerHTML += `<tr><td>${c.Segment}</td><td>${c['Customer Count']}</td><td><strong>${c['Abuse Rate']}</strong></td><td>${parseFloat(c['Avg Prior Returns']).toFixed(2)}</td><td>${parseFloat(c['Lifetime Return Rate']).toFixed(2)}</td></tr>`;
+                });
+            }
+
+            let tbodyProdClust = document.getElementById('tbl_prod_clusters');
+            if (tbodyProdClust && data.prod_clusters) {
+                tbodyProdClust.innerHTML = '';
+                data.prod_clusters.forEach(c => {
+                    tbodyProdClust.innerHTML += `<tr><td>${c.Segment}</td><td>${c['Product Count']}</td><td><strong>${c['Abuse Rate']}</strong></td><td>${parseFloat(c['Avg Order Value']).toFixed(2)}</td><td>${parseFloat(c['Avg Return Window (Days)']).toFixed(1)}</td></tr>`;
                 });
             }
         })

@@ -60,12 +60,19 @@ def prepare_partition(df, test_size=0.20, seed=42):
     X_train_scaled = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
     X_test_scaled = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
 
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(7.5, 3.2))
-    fig, (ax1) = plt.subplots(1, figsize=(7.5, 3.2))
-    ax1.pie([len(train_df), len(test_df)], labels=['Train Set', 'Test Set'], autopct='%1.1f%%', colors=['#2b5c8f', '#d95f02'], startangle=140)
-    ax1.set_title(f"Partitioning ({int(test_size*100)}% Test)", fontsize=10, fontweight='bold')
-    ax2.pie([np.sum(y_train == 0), np.sum(y_train == 1)], labels=['Legitimate (0)', 'Abuse (1)'], autopct='%1.1f%%', colors=['#2ca02c', '#d62728'], startangle=140)
-    ax2.set_title("Training Class Balance", fontsize=10, fontweight='bold')
+    # Large Single Pie Chart
+    fig, ax = plt.subplots(figsize=(7.5, 5.0))
+    ax.pie(
+        [len(train_df), len(test_df)],
+        labels=['Train Set', 'Test Set'],
+        autopct='%1.1f%%',
+        colors=['#2b5c8f', '#d95f02'],
+        startangle=140,
+        textprops={'fontsize': 13, 'weight': 'bold'},
+        radius=1.15
+    )
+    ax.set_title(f"Partitioning ({int(test_size*100)}% Test)", fontsize=14, fontweight='bold', pad=15)
+    plt.tight_layout()
     pie_b64 = fig_to_base64(fig)
 
     return {

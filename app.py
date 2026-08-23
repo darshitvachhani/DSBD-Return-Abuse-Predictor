@@ -14,6 +14,8 @@ from models.random_forest import run_random_forest
 from models.bagging import run_bagging
 from models.clustering import run_clustering
 from models.cost_optimization import run_cost_analysis, generate_combined_roc
+from models.implications import generate_model_implications
+from models.business_impact import generate_policy_matrix_plot, calculate_business_savings
 
 app = Flask(__name__)
 RAW_DF = load_and_preprocess()
@@ -27,44 +29,55 @@ def orchestrate_pipeline(params=None):
             'c_fp': 50.0, 'c_fn': 25.0
         }
 
-    # 1. Data Partitioning
+    # 1. Partitioning & Preprocessing
     data = prepare_partition(RAW_DF, test_size=params['test_size'])
     
-    # 2. Text Analytics & Model Runs
+    # 2. Text Analytics & Classifiers
     text_res = run_text_analytics(data['train_df'])
     lr_res = run_logistic(data, lr_thresh=params['lr_thresh'])
     cart_res = run_cart(data, max_depth=params['cart_depth'], cart_thresh=params['cart_thresh'])
     rf_res = run_random_forest(data, n_trees=params['rf_trees'], depth=params['rf_depth'], rf_thresh=params['rf_thresh'])
     bag_res = run_bagging(data, n_trees=params['bag_trees'], depth=params['rf_depth'], bag_thresh=params['bag_thresh'])
+    
+    # 3. Dual Clustering (Customer & Product)
     clust_res = run_clustering(RAW_DF, NUM_COLS, n_clusters=params['n_clusters'])
+    
+    # 4. Cost Optimization & Multi-Model ROC
     cost_res = run_cost_analysis(data['y_test'], bag_res['y_prob'], c_fp=params['c_fp'], c_fn=params['c_fn'])
-
     combined_roc = generate_combined_roc(data['y_test'], {
         'Logistic Reg.': lr_res['y_prob'], 'CART Tree': cart_res['y_prob'],
         'Random Forest': rf_res['y_prob'], 'Bagging': bag_res['y_prob']
     })
 
+    # 5. Implications & Business Impact Logic
+    metrics = {
+        'lr': lr_res['metrics'], 'cart': cart_res['metrics'],
+        'rf': rf_res['metrics'], 'bag': bag_res['metrics']
+    }
+    implications_data = generate_model_implications(metrics, cost_res['opt_thresh'])
+    policy_matrix_plot = generate_policy_matrix_plot()
+    biz_impact_data = calculate_business_savings(RAW_DF, best_auc=float(bag_res['metrics']['auc']))
+
     plots = {
         'split_pie': data['pie_plot'],
         'combined_roc': combined_roc,
+        'policy_matrix': policy_matrix_plot,
         **text_res['plots'],
         **lr_res['plots'], **cart_res['plots'],
         **rf_res['plots'], **bag_res['plots'],
         **clust_res['plots'], **cost_res['plots']
     }
 
-    metrics = {
-        'lr': lr_res['metrics'], 'cart': cart_res['metrics'],
-        'rf': rf_res['metrics'], 'bag': bag_res['metrics']
-    }
-
     return {
         'metrics': metrics,
         'plots': plots,
         'lr_coefs': lr_res['coefs'],
-        'clusters': clust_res['table'],
+        'cust_clusters': clust_res.get('cust_table', clust_res.get('table', [])),
+        'prod_clusters': clust_res.get('prod_table', []),
         'opt_thresh': cost_res['opt_thresh'],
         'min_cost': cost_res['min_cost'],
+        'implications': implications_data,
+        'biz_impact': biz_impact_data,
         'models': {
             'bag': bag_res['model'],
             'tfidf': data['tfidf'],
@@ -162,7 +175,8 @@ def update_dashboard():
         'metrics': updated_data['metrics'],
         'plots': updated_data['plots'],
         'lr_coefs': updated_data['lr_coefs'],
-        'clusters': updated_data['clusters'],
+        'cust_clusters': updated_data['cust_clusters'],
+        'prod_clusters': updated_data['prod_clusters'],
         'opt_thresh': updated_data['opt_thresh'],
         'min_cost': updated_data['min_cost']
     }

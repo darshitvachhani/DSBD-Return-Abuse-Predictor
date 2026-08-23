@@ -25,7 +25,7 @@ def run_random_forest(data_bundle, n_trees=100, depth=8, rf_thresh=0.50, seed=42
     metrics = calc_metrics(y_te, y_pred, y_prob)
 
     # 2. Representative Tree Visualization (Depth 3 Truncated Subtree)
-    fig_t, ax_t = plt.subplots(figsize=(10, 4.4))
+    fig_t, ax_t = plt.subplots(figsize=(10, 6.4))
     plot_tree(
         rf.estimators_[0],
         feature_names=X_tr.columns.tolist(),

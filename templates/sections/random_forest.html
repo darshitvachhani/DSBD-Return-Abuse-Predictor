@@ -1,13 +1,13 @@
 <section id="sec-rf" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-tree text-primary me-2"></i> 5. Random Forest Ensemble</div>
+    <div class="section-header"><i class="bi bi-tree text-primary me-2"></i> 6. Random Forest Ensemble</div>
     <div class="p-3">
-        <div class="row g-3">
-            <!-- Left: Code & Feature Importance -->
+        <!-- Row 1: Code Box & Metrics Table -->
+        <div class="row g-3 mb-3">
             <div class="col-lg-6">
-                <div class="code-box">
+                <div class="code-box h-100">
 <pre><code class="language-python"># Random Forest Ensemble
 rf = RandomForestClassifier(
-    n_estimators=rf_trees, max_depth=8, 
+    n_estimators=rf_trees, max_depth=8,
     min_samples_leaf=10, random_state=42, n_jobs=-1
 )
 rf.fit(X_train, y_train)
@@ -15,40 +15,53 @@ y_prob_rf = rf.predict_proba(X_test)[:, 1]
 y_pred_rf = (y_prob_rf >= rf_thresh).astype(int)
 </code></pre>
                 </div>
-                <div class="text-center mt-2">
-                    <img id="img_rf_imp" src="data:image/png;base64,{{ data.plots.rf_imp }}" class="img-fluid rounded output-box mb-2" alt="RF Importance">
-                    <img id="img_roc_rf" src="data:image/png;base64,{{ data.plots.roc_rf }}" class="img-fluid rounded output-box" alt="RF ROC">
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-speedometer2 text-primary me-2"></i>Model Evaluation Metrics</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered text-center align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Accuracy</th>
+                                    <th>Precision</th>
+                                    <th>Recall</th>
+                                    <th>AUC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="fw-bold">
+                                    <td><span class="badge bg-primary px-3 py-2 fs-6" id="m_rf_acc">{{ data.metrics.rf.acc }}</span></td>
+                                    <td><span class="badge bg-success px-3 py-2 fs-6" id="m_rf_prec">{{ data.metrics.rf.prec }}</span></td>
+                                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6" id="m_rf_rec">{{ data.metrics.rf.rec }}</span></td>
+                                    <td><span class="badge bg-info text-dark px-3 py-2 fs-6" id="m_rf_auc">{{ data.metrics.rf.auc }}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <!-- Right: Controls & Representative Tree -->
+        </div>
+
+        <!-- Row 2: Full Horizontal Tree -->
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="output-box text-center p-2">
+                    <img id="img_rf_tree" src="data:image/png;base64,{{ data.plots.rf_tree }}" class="img-fluid rounded w-100" style="max-height: 520px; object-fit: contain;" alt="Random Forest Representative Tree">
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Feature Importance (Left) & ROC Curve (Right) -->
+        <div class="row g-3">
             <div class="col-lg-6">
-                <div class="output-box">
-                    <!-- <div class="control-panel">
-                        <div class="row g-2">
-                            <div class="col-6">
-                                <label class="form-label small fw-bold d-flex justify-content-between mb-1">
-                                    <span>Trees:</span> <span id="lbl_rf_trees" class="badge bg-primary">100</span>
-                                </label>
-                                <input type="range" class="form-range" id="input_rf_trees" min="25" max="200" step="25" value="100" oninput="document.getElementById('lbl_rf_trees').innerText = this.value; triggerUpdate();">
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label small fw-bold d-flex justify-content-between mb-1">
-                                    <span>Cutoff:</span> <span id="lbl_rf_thresh" class="badge bg-primary">0.50</span>
-                                </label>
-                                <input type="range" class="form-range" id="input_rf_thresh" min="0.10" max="0.90" step="0.05" value="0.50" oninput="document.getElementById('lbl_rf_thresh').innerText = parseFloat(this.value).toFixed(2); triggerUpdate();">
-                            </div>
-                        </div>
-                    </div> -->
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="badge bg-primary metric-badge">Accuracy: <span id="m_rf_acc">{{ data.metrics.rf.acc }}</span></span>
-                        <span class="badge bg-success metric-badge">Precision: <span id="m_rf_prec">{{ data.metrics.rf.prec }}</span></span>
-                        <span class="badge bg-warning text-dark metric-badge">Recall: <span id="m_rf_rec">{{ data.metrics.rf.rec }}</span></span>
-                        <span class="badge bg-info text-dark metric-badge">AUC: <span id="m_rf_auc">{{ data.metrics.rf.auc }}</span></span>
-                    </div>
-                    <div class="text-center">
-                        <img id="img_rf_tree" src="data:image/png;base64,{{ data.plots.rf_tree }}" class="img-fluid rounded border" alt="RF Tree">
-                        <small class="text-muted d-block mt-1" style="font-size: 0.72rem;">*Representative subtree displayed up to depth 3 for readability; grey leaves continue to deeper leaf nodes.</small>
-                    </div>
+                <div class="output-box text-center p-2 h-100">
+                    <img id="img_rf_imp" src="data:image/png;base64,{{ data.plots.rf_imp }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Random Forest Feature Importance">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box text-center p-2 h-100">
+                    <img id="img_roc_rf" src="data:image/png;base64,{{ data.plots.roc_rf }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Random Forest ROC Curve">
                 </div>
             </div>
         </div>

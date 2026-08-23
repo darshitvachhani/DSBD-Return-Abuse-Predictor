@@ -1,0 +1,122 @@
+<section id="sec-strategy" class="section-card nav-anchor">
+    <div class="section-header">
+        <i class="bi bi-graph-up-arrow text-success me-2"></i> 12. Business Impact, Financial ROI & Strategic Policy Playbook
+    </div>
+    <div class="p-3">
+
+        <!-- Top Row: Financial Impact KPI Summary Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-danger border-4 text-center">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Baseline Fraud Loss</span>
+                    <h3 class="fw-bold text-danger mb-1">{{ data.biz_impact.baseline_loss }}</h3>
+                    <p class="small text-muted mb-0" style="font-size: 0.74rem;">Uncontrolled annual loss under standard unmonitored return policies.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-success border-4 text-center">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Projected Net Savings</span>
+                    <h3 class="fw-bold text-success mb-1">{{ data.biz_impact.net_savings }}</h3>
+                    <p class="small text-muted mb-0" style="font-size: 0.74rem;">Direct bottom-line recovery net of operational review costs.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-primary border-4 text-center">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Abuse Interception Rate</span>
+                    <h3 class="fw-bold text-primary mb-1">{{ data.biz_impact.interception_rate }}</h3>
+                    <p class="small text-muted mb-0" style="font-size: 0.74rem;">Serial wardrobers and bracketing patterns intercepted before refund.</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="output-box p-3 h-100 border-start border-info border-4 text-center">
+                    <span class="text-muted small fw-bold text-uppercase d-block mb-1">Legitimate VIP Fast-Track</span>
+                    <h3 class="fw-bold text-info mb-1">{{ data.biz_impact.friction_reduction }}</h3>
+                    <p class="small text-muted mb-0" style="font-size: 0.74rem;">Trusted customers receiving zero-friction, instant 1-click refund credits.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Middle Row: 2D Policy Visual & Strategic Policy Framework -->
+        <div class="row g-3 align-items-stretch mb-3">
+            <!-- Left: Visual 2D Policy Routing Matrix -->
+            <div class="col-lg-6">
+                <div class="output-box h-100 d-flex flex-column justify-content-between p-3">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-grid-3x3-gap text-primary me-2"></i>Dynamic Customer × Product Policy Matrix
+                    </h6>
+                    <div class="text-center my-auto">
+                        <img id="img_policy_matrix" src="data:image/png;base64,{{ data.plots.policy_matrix }}" class="img-fluid rounded w-100" style="height: 330px; object-fit: contain;" alt="Policy Matrix">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Tiered Interventions Playbook -->
+            <div class="col-lg-6">
+                <div class="output-box h-100 d-flex flex-column justify-content-between p-3">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-shield-check text-success me-2"></i>Tiered Operational Interventions
+                    </h6>
+                    
+                    <div class="p-2 rounded bg-light border mb-2">
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="badge bg-success me-2">Green Tier</span>
+                            <strong class="small text-dark">Zero-Friction Fast-Track (Low Risk Customers / Standard Goods)</strong>
+                        </div>
+                        <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                            Instant refund upon first carrier scan. Retains top 80% customer goodwill without burdening reverse logistics.
+                        </p>
+                    </div>
+
+                    <div class="p-2 rounded bg-light border mb-2">
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="badge bg-warning text-dark me-2">Amber Tier</span>
+                            <strong class="small text-dark">Soft Friction & Micro-Fees (Moderate Risk / High Window)</strong>
+                        </div>
+                        <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                            Enforce return window reduction from 30 to 14 days; assess a £3.99 restocking fee on returned orders exceeding 4 items.
+                        </p>
+                    </div>
+
+                    <div class="p-2 rounded bg-light border">
+                        <div class="d-flex align-items-center mb-1">
+                            <span class="badge bg-danger me-2">Red Tier</span>
+                            <strong class="small text-dark">Hard Verification & Gatekeeping (Chronic Abusers / Wardrobing)</strong>
+                        </div>
+                        <p class="small text-muted mb-0" style="font-size: 0.76rem; line-height: 1.4;">
+                            Revoke free home pickup; mandate physical drop-off with 360-degree security tag verification before funds release.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Dual Strategy Deep-Dive -->
+        <div class="row g-3">
+            <div class="col-lg-6">
+                <div class="p-3 rounded bg-light border h-100">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-person-gear text-primary me-2"></i>1. Customer-Centric Policy Differentiation
+                    </h6>
+                    <ul class="small text-muted ps-3 mb-0" style="font-size: 0.78rem; line-height: 1.55;">
+                        <li class="mb-1"><strong>VIP Protection:</strong> Never apply friction to high-LTV customers on their first rare return; preserve brand affinity.</li>
+                        <li class="mb-1"><strong>Bracketing Dissuasion:</strong> When multiple sizes of the exact same SKU are ordered, introduce virtual sizing assistance prompts before checkout.</li>
+                        <li><strong>Identity Linking:</strong> Cross-reference device fingerprinting and payment details to avoid repeat abusers registering new accounts.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="p-3 rounded bg-light border h-100">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-box-seam text-primary me-2"></i>2. Product & Category-Specific Rules
+                    </h6>
+                    <ul class="small text-muted ps-3 mb-0" style="font-size: 0.78rem; line-height: 1.55;">
+                        <li class="mb-1"><strong>Occasionwear Wardrobing:</strong> Attach prominent, non-removable external security ribbons that prevent wearing the garment without removal.</li>
+                        <li class="mb-1"><strong>High-Value Electronics:</strong> Serial number validation matched at warehouse intake before automated refund execution.</li>
+                        <li><strong>Low-Ticket Items (&lt;£10):</strong> Trigger "Returnless Refunds" for trusted profiles to eliminate reverse shipping waste.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

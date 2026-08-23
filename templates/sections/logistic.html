@@ -1,10 +1,10 @@
-<section id="sec-lr" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-activity text-primary me-2"></i> 3. Logistic Regression Modeling</div>
+<section id="sec-logistic" class="section-card nav-anchor">
+    <div class="section-header"><i class="bi bi-calculator text-primary me-2"></i> 4. Logistic Regression Modeling</div>
     <div class="p-3">
-        <div class="row g-3">
-            <!-- Left: Code & Expanded Coef Table -->
+        <!-- Row 1: Code Box & Metrics Table -->
+        <div class="row g-3 mb-3">
             <div class="col-lg-6">
-                <div class="code-box mb-3">
+                <div class="code-box h-100">
 <pre><code class="language-python"># Multivariate Logistic Regression with Statsmodels
 import statsmodels.api as sm
 
@@ -16,51 +16,77 @@ y_prob_lr = logit_model.predict(X_test_sm)
 y_pred_lr = (y_prob_lr >= lr_thresh).astype(int)
 </code></pre>
                 </div>
-                <div class="table-responsive output-box">
-                    <h6 class="fw-bold text-dark mb-2" style="font-size: 0.85rem;">Estimated Logistic Regression Coefficients</h6>
-                    <table class="table table-sm table-striped table-hover mb-0" style="font-size: 0.74rem;">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Predictor</th>
-                                <th>Estimate</th>
-                                <th>z-stat</th>
-                                <th>p-value</th>
-                                <th>Odds Ratio</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbl_lr_coefs">
-                            {% for r in data.lr_coefs %}
-                            <tr>
-                                <td class="fw-semibold">{{ r.Predictor }}</td>
-                                <td>{{ r.Coefficient }}</td>
-                                <td>{{ r['z-stat'] }}</td>
-                                <td>{{ r['p-value'] }}</td>
-                                <td><span class="badge bg-light text-dark border">{{ r['Odds Ratio'] }}</span></td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-speedometer2 text-primary me-2"></i>Model Evaluation Metrics</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered text-center align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Accuracy</th>
+                                    <th>Precision</th>
+                                    <th>Recall</th>
+                                    <th>AUC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="fw-bold">
+                                    <td><span class="badge bg-primary px-3 py-2 fs-6" id="m_lr_acc">{{ data.metrics.lr.acc }}</span></td>
+                                    <td><span class="badge bg-success px-3 py-2 fs-6" id="m_lr_prec">{{ data.metrics.lr.prec }}</span></td>
+                                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6" id="m_lr_rec">{{ data.metrics.lr.rec }}</span></td>
+                                    <td><span class="badge bg-info text-dark px-3 py-2 fs-6" id="m_lr_auc">{{ data.metrics.lr.auc }}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <!-- Right: Controls, Badges & Visualizations -->
+        </div>
+
+        <!-- Row 2: Full Width Coefficients Table Below -->
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="output-box p-3">
+                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-table text-primary me-2"></i>Estimated Logistic Regression Coefficients</h6>
+                    <div class="table-responsive" style="max-height: 280px; overflow-y: auto;">
+                        <table class="table table-sm table-striped table-hover mb-0" id="tbl_lr_coefs">
+                            <thead class="table-light sticky-top">
+                                <tr>
+                                    <th>Predictor</th>
+                                    <th>Estimate</th>
+                                    <th>z-stat</th>
+                                    <th>p-value</th>
+                                    <th>Odds Ratio</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data.coefs %}
+                                <tr>
+                                    <td class="fw-semibold">{{ row.Predictor }}</td>
+                                    <td>{{ row.Coefficient }}</td>
+                                    <td>{{ row['z-stat'] }}</td>
+                                    <td>{{ row['p-value'] }}</td>
+                                    <td><span class="badge bg-light text-dark border">{{ row['Odds Ratio'] }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Sigmoid Curve (Left) & ROC Curve (Right) at Same Level -->
+        <div class="row g-3">
             <div class="col-lg-6">
-                <div class="output-box">
-                    <!-- <div class="control-panel">
-                        <label class="form-label small fw-bold d-flex justify-content-between mb-1">
-                            <span>Logistic Decision Cutoff:</span> <span id="lbl_lr_thresh" class="badge bg-primary">0.50</span>
-                        </label>
-                        <input type="range" class="form-range" id="input_lr_thresh" min="0.10" max="0.90" step="0.05" value="0.50" oninput="document.getElementById('lbl_lr_thresh').innerText = parseFloat(this.value).toFixed(2); triggerUpdate();">
-                    </div> -->
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="badge bg-primary metric-badge">Accuracy: <span id="m_lr_acc">{{ data.metrics.lr.acc }}</span></span>
-                        <span class="badge bg-success metric-badge">Precision: <span id="m_lr_prec">{{ data.metrics.lr.prec }}</span></span>
-                        <span class="badge bg-warning text-dark metric-badge">Recall: <span id="m_lr_rec">{{ data.metrics.lr.rec }}</span></span>
-                        <span class="badge bg-info text-dark metric-badge">AUC: <span id="m_lr_auc">{{ data.metrics.lr.auc }}</span></span>
-                    </div>
-                    <div class="text-center">
-                        <img id="img_sigmoid" src="data:image/png;base64,{{ data.plots.sigmoid }}" class="img-fluid rounded mb-2 border" alt="Sigmoid Curve">
-                        <img id="img_roc_lr" src="data:image/png;base64,{{ data.plots.roc_lr }}" class="img-fluid rounded border" alt="Logistic ROC Curve">
-                    </div>
+                <div class="output-box text-center p-2 h-100">
+                    <img id="img_sigmoid" src="data:image/png;base64,{{ data.plots.sigmoid }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Sigmoid Curve">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="output-box text-center p-2 h-100">
+                    <img id="img_roc_lr" src="data:image/png;base64,{{ data.plots.roc_lr }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Logistic ROC Curve">
                 </div>
             </div>
         </div>

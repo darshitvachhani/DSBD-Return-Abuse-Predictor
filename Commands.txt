@@ -1,0 +1,11 @@
+Commands :-
+
+Run app :- python3 app.py
+Kill existing processes :- lsof -ti :5000 | xargs kill -9
+                                    &
+                            Shortcut :- Ctrl + C
+Check current file modifications:- git status
+Stage all modified/new files:- git add .        
+Save a snapshot with a commit message:- git commit -m "Describe your changes here"
+Push local commits to GitHub:- git push origin main
+Fetch and merge latest changes from GitHub:- git pull origin main
