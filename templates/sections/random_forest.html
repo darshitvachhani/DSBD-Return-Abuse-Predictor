@@ -1,69 +1,119 @@
 <section id="sec-rf" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-tree text-primary me-2"></i> 6. Random Forest Ensemble</div>
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-tree-fill text-success me-2"></i> 8. Random Forest Ensemble</span>
+        <span class="badge bg-success">De-Correlated Bagging</span>
+    </div>
     <div class="p-3">
-        <!-- Row 1: Code Box & Metrics Table -->
-        <div class="row g-3 mb-3">
-            <div class="col-lg-6">
-                <div class="code-box h-100">
-<pre><code class="language-python"># Random Forest Ensemble
-rf = RandomForestClassifier(
-    n_estimators=rf_trees, max_depth=8,
-    min_samples_leaf=10, random_state=42, n_jobs=-1
-)
-rf.fit(X_train, y_train)
-y_prob_rf = rf.predict_proba(X_test)[:, 1]
-y_pred_rf = (y_prob_rf >= rf_thresh).astype(int)
-</code></pre>
+
+        <!-- Hyperparameter Control Panel -->
+        <!--<div class="control-panel mb-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold mb-1">Number of Estimators (Trees): <span id="rf_trees_val" class="badge bg-primary">100</span></label>
+                    <input type="range" class="form-range" id="input_rf_trees" min="20" max="200" step="10" value="100" oninput="document.getElementById('rf_trees_val').innerText = this.value">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold mb-1">Decision Threshold (t): <span id="rf_thresh_val" class="badge bg-primary">0.50</span></label>
+                    <input type="range" class="form-range" id="input_rf_thresh" min="0.10" max="0.90" step="0.05" value="0.50" oninput="document.getElementById('rf_thresh_val').innerText = this.value">
+                </div>
+                <div class="col-md-2 text-end">
+                    <button class="btn btn-success btn-sm fw-bold w-100 mt-3" onclick="triggerUpdate()">Apply Tuning</button>
                 </div>
             </div>
+        </div>-->
+
+        <!-- Top Section: Code Block (Left) & Evaluation Metrics (Right) -->
+        <div class="row g-3 mb-3 align-items-stretch">
             <div class="col-lg-6">
-                <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
-                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-speedometer2 text-primary me-2"></i>Model Evaluation Metrics</h6>
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered text-center align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Accuracy</th>
-                                    <th>Precision</th>
-                                    <th>Recall</th>
-                                    <th>AUC</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="fw-bold">
-                                    <td><span class="badge bg-primary px-3 py-2 fs-6" id="m_rf_acc">{{ data.metrics.rf.acc }}</span></td>
-                                    <td><span class="badge bg-success px-3 py-2 fs-6" id="m_rf_prec">{{ data.metrics.rf.prec }}</span></td>
-                                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6" id="m_rf_rec">{{ data.metrics.rf.rec }}</span></td>
-                                    <td><span class="badge bg-info text-dark px-3 py-2 fs-6" id="m_rf_auc">{{ data.metrics.rf.auc }}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="code-box h-100">
+                    <pre class="m-0"><code class="language-python"># Random Forest Ensemble
+rf = RandomForestClassifier(
+    n_estimators=rf_trees,
+    max_depth=8,
+    min_samples_leaf=10,
+    random_state=42,
+    n_jobs=-1
+)
+rf.fit(X_train, y_train)
+
+# Predict Test Probabilities
+y_prob_rf = rf.predict_proba(X_test)[:, 1]
+y_pred_rf = (y_prob_rf >= rf_thresh).astype(int)</code></pre>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 d-flex flex-column justify-content-between">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-speedometer2 text-success me-2"></i>Model Evaluation Metrics
+                    </h6>
+                    <div class="row g-2 text-center my-auto">
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">Accuracy</small>
+                                <span id="m_rf_acc" class="metric-badge text-primary fs-6">{{ data.metrics.rf.acc }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">Precision</small>
+                                <span id="m_rf_prec" class="metric-badge text-success fs-6">{{ data.metrics.rf.prec }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">Recall</small>
+                                <span id="m_rf_rec" class="metric-badge text-warning text-dark fs-6">{{ data.metrics.rf.rec }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">AUC</small>
+                                <span id="m_rf_auc" class="metric-badge text-dark fs-6">{{ data.metrics.rf.auc }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted d-block mt-2" style="font-size: 0.72rem; line-height: 1.4;">
+                        Bootstrap samples combined with random feature subsets (&radic;p) de-correlate individual decision trees.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full-Width Representative Forest Tree Diagram -->
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="output-box p-2 text-center">
+                    <img id="img_rf_tree" src="data:image/png;base64,{{ data.plots.rf_tree }}" class="img-fluid rounded border" alt="Random Forest Representative Tree">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Confusion Matrix (Left) & ROC Curve (Right) -->
+        <div class="row g-3 align-items-stretch">
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 text-center d-flex flex-column justify-content-center">
+                    <span class="badge bg-light text-dark border mb-2 fw-semibold" style="font-size: 0.75rem;">Model Confusion Matrix</span>
+                    <div class="d-flex justify-content-center">
+                        <img id="img_rf_cm" src="data:image/png;base64,{{ data.plots.rf_cm }}" class="img-fluid rounded" style="max-height: 280px;" alt="Random Forest Confusion Matrix">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="badge bg-light text-dark border mb-2 fw-semibold" style="font-size: 0.75rem;">Receiver Operating Characteristic</span>
+                        <img id="img_rf_roc" src="data:image/png;base64,{{ data.plots.rf_roc }}" class="img-fluid rounded border" alt="Random Forest ROC Curve">
+                    </div>
+                    <div class="p-2 rounded bg-light border text-start mt-2">
+                        <small class="text-muted d-block" style="font-size: 0.72rem; line-height: 1.45;">
+                            <strong>Analytical Note:</strong> Random Forest reduces variance over standard trees by sub-sampling features at every split.
+                        </small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Row 2: Full Horizontal Tree -->
-        <div class="row g-3 mb-3">
-            <div class="col-12">
-                <div class="output-box text-center p-2">
-                    <img id="img_rf_tree" src="data:image/png;base64,{{ data.plots.rf_tree }}" class="img-fluid rounded w-100" style="max-height: 520px; object-fit: contain;" alt="Random Forest Representative Tree">
-                </div>
-            </div>
-        </div>
-
-        <!-- Row 3: Feature Importance (Left) & ROC Curve (Right) -->
-        <div class="row g-3">
-            <div class="col-lg-6">
-                <div class="output-box text-center p-2 h-100">
-                    <img id="img_rf_imp" src="data:image/png;base64,{{ data.plots.rf_imp }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Random Forest Feature Importance">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="output-box text-center p-2 h-100">
-                    <img id="img_roc_rf" src="data:image/png;base64,{{ data.plots.roc_rf }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="Random Forest ROC Curve">
-                </div>
-            </div>
-        </div>
     </div>
 </section>

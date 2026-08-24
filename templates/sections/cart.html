@@ -1,66 +1,117 @@
 <section id="sec-cart" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-diagram-3 text-primary me-2"></i> 5. Classification Tree</div>
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-diagram-3-fill text-warning me-2"></i> 7. Classification Tree (CART)</span>
+        <span class="badge bg-warning text-dark">Non-Parametric Base Learner</span>
+    </div>
     <div class="p-3">
-        <!-- Row 1: Code Box (Left) & Metrics Table (Right) -->
-        <div class="row g-3 mb-3">
-            <div class="col-lg-6">
-                <div class="code-box h-100">
-<pre><code class="language-python"># Pruned Decision Tree (CART)
-cart = DecisionTreeClassifier(max_depth=cart_depth, min_samples_leaf=20, random_state=42)
-cart.fit(X_train, y_train)
-y_prob_cart = cart.predict_proba(X_test)[:, 1]
-y_pred_cart = (y_prob_cart >= cart_thresh).astype(int)
-</code></pre>
+
+        <!-- Hyperparameter Control Panel -->
+        <!--<div class="control-panel mb-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold mb-1">Tree Max Depth: <span id="cart_depth_val" class="badge bg-primary">3</span></label>
+                    <input type="range" class="form-range" id="input_cart_depth" min="2" max="10" step="1" value="3" oninput="document.getElementById('cart_depth_val').innerText = this.value">
+                </div>
+                <div class="col-md-5">
+                    <label class="form-label small fw-bold mb-1">Decision Threshold (t): <span id="cart_thresh_val" class="badge bg-primary">0.50</span></label>
+                    <input type="range" class="form-range" id="input_cart_thresh" min="0.10" max="0.90" step="0.05" value="0.50" oninput="document.getElementById('cart_thresh_val').innerText = this.value">
+                </div>
+                <div class="col-md-2 text-end">
+                    <button class="btn btn-warning btn-sm fw-bold w-100 mt-3" onclick="triggerUpdate()">Apply Tuning</button>
                 </div>
             </div>
+        </div>-->
+
+        <!-- Top Section: Code Block (Left) & Evaluation Metrics (Right) -->
+        <div class="row g-3 mb-3 align-items-stretch">
             <div class="col-lg-6">
-                <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
-                    <h6 class="fw-bold text-dark mb-2"><i class="bi bi-speedometer2 text-primary me-2"></i>Model Evaluation Metrics</h6>
-                    <div class="table-responsive">
-                        <table class="table table-sm table-bordered text-center align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Accuracy</th>
-                                    <th>Precision</th>
-                                    <th>Recall</th>
-                                    <th>AUC</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="fw-bold">
-                                    <td><span class="badge bg-primary px-3 py-2 fs-6" id="m_cart_acc">{{ data.metrics.cart.acc }}</span></td>
-                                    <td><span class="badge bg-success px-3 py-2 fs-6" id="m_cart_prec">{{ data.metrics.cart.prec }}</span></td>
-                                    <td><span class="badge bg-warning text-dark px-3 py-2 fs-6" id="m_cart_rec">{{ data.metrics.cart.rec }}</span></td>
-                                    <td><span class="badge bg-info text-dark px-3 py-2 fs-6" id="m_cart_auc">{{ data.metrics.cart.auc }}</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="code-box h-100">
+                    <pre class="m-0"><code class="language-python"># Pruned Decision Tree (CART)
+cart = DecisionTreeClassifier(
+    max_depth=cart_depth,
+    min_samples_leaf=20,
+    random_state=42
+)
+cart.fit(X_train, y_train)
+
+# Predict Test Probabilities
+y_prob_cart = cart.predict_proba(X_test)[:, 1]
+y_pred_cart = (y_prob_cart >= cart_thresh).astype(int)</code></pre>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 d-flex flex-column justify-content-between">
+                    <h6 class="fw-bold text-dark mb-2">
+                        <i class="bi bi-speedometer2 text-warning me-2"></i>Model Evaluation Metrics
+                    </h6>
+                    <div class="row g-2 text-center my-auto">
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">Accuracy</small>
+                                <span id="m_cart_acc" class="metric-badge text-primary fs-6">{{ data.metrics.cart.acc }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">Precision</small>
+                                <span id="m_cart_prec" class="metric-badge text-success fs-6">{{ data.metrics.cart.prec }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">Recall</small>
+                                <span id="m_cart_rec" class="metric-badge text-warning text-dark fs-6">{{ data.metrics.cart.rec }}</span>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="p-2 rounded bg-light border">
+                                <small class="text-muted d-block" style="font-size: 0.70rem;">AUC</small>
+                                <span id="m_cart_auc" class="metric-badge text-dark fs-6">{{ data.metrics.cart.auc }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <small class="text-muted d-block mt-2" style="font-size: 0.72rem; line-height: 1.4;">
+                        Non-parametric recursive binary splitting partitions feature space into homogenous leaf regions.
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Full-Width Decision Tree Diagram -->
+        <div class="row g-3 mb-3">
+            <div class="col-12">
+                <div class="output-box p-2 text-center">
+                    <img id="img_cart_tree" src="data:image/png;base64,{{ data.plots.cart_tree }}" class="img-fluid rounded border" alt="CART Decision Tree Structure">
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Row: Confusion Matrix (Left) & ROC Curve (Right) -->
+        <div class="row g-3 align-items-stretch">
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 text-center d-flex flex-column justify-content-center">
+                    <span class="badge bg-light text-dark border mb-2 fw-semibold" style="font-size: 0.75rem;">Model Confusion Matrix</span>
+                    <div class="d-flex justify-content-center">
+                        <img id="img_cart_cm" src="data:image/png;base64,{{ data.plots.cart_cm }}" class="img-fluid rounded" style="max-height: 280px;" alt="CART Confusion Matrix">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="output-box h-100 p-3 text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <span class="badge bg-light text-dark border mb-2 fw-semibold" style="font-size: 0.75rem;">Receiver Operating Characteristic</span>
+                        <img id="img_cart_roc" src="data:image/png;base64,{{ data.plots.cart_roc }}" class="img-fluid rounded border" alt="CART ROC Curve">
+                    </div>
+                    <div class="p-2 rounded bg-light border text-start mt-2">
+                        <small class="text-muted d-block" style="font-size: 0.72rem; line-height: 1.45;">
+                            <strong>Analytical Note:</strong> CART decision boundaries create piecewise orthogonal splits. Single trees are prone to variance on unseen test data.
+                        </small>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Row 2: Full Horizontal Decision Tree -->
-        <div class="row g-3 mb-3">
-            <div class="col-12">
-                <div class="output-box text-center p-2">
-                    <img id="img_cart_tree" src="data:image/png;base64,{{ data.plots.cart_tree }}" class="img-fluid rounded w-100" style="max-height: 520px; object-fit: contain;" alt="CART Tree Diagram">
-                </div>
-            </div>
-        </div>
-
-        <!-- Row 3: Feature Importance (Left) & ROC Curve (Right) at Same Level -->
-        <div class="row g-3">
-            <div class="col-lg-6">
-                <div class="output-box text-center p-2 h-100">
-                    <img id="img_cart_imp" src="data:image/png;base64,{{ data.plots.cart_imp }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="CART Feature Importance">
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="output-box text-center p-2 h-100">
-                    <img id="img_roc_cart" src="data:image/png;base64,{{ data.plots.roc_cart }}" class="img-fluid rounded w-100" style="height: 340px; object-fit: contain;" alt="CART ROC Curve">
-                </div>
-            </div>
-        </div>
     </div>
 </section>

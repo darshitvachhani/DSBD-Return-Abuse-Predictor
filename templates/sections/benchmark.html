@@ -1,70 +1,84 @@
 <section id="sec-comp" class="section-card nav-anchor">
-    <div class="section-header"><i class="bi bi-table text-primary me-2"></i> 8. Master Model Benchmark & Combined ROC</div>
+    <div class="section-header d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-table text-primary me-2"></i> 10. Master Model Benchmark & Combined ROC</span>
+        <span class="badge bg-primary">Model Comparison</span>
+    </div>
     <div class="p-3">
-        <!-- Added align-items-stretch to ensure both columns match height -->
-        <div class="row g-3 align-items-stretch">
-            <div class="col-lg-6">
-                <!-- Added d-flex flex-column to fill full card height -->
-                <div class="output-box h-100 d-flex flex-column justify-content-center p-3">
-                    <h6 class="fw-bold mb-2 text-dark"><i class="bi bi-list-check text-primary me-2"></i>Comparison Table (Test Set)</h6>
+        <div class="row g-3">
+            <div class="col-12">
+                <div class="output-box p-3">
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-list-columns-reverse text-primary me-2"></i>Comparison Table (Test Set)</h6>
                     <div class="table-responsive">
-                        <table class="table table-sm table-bordered table-hover text-center align-middle mb-0" style="font-size: 0.82rem;">
+                        <table class="table table-sm table-bordered text-center align-middle mb-0" style="font-size: 0.8rem;">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Model</th><th>Acc</th><th>Prec</th><th>Rec</th><th>F1</th><th>AUC</th><th>FP / FN</th>
+                                    <th class="text-start">Model</th>
+                                    <th>Acc</th>
+                                    <th>Prec</th>
+                                    <th>Rec</th>
+                                    <th>F1</th>
+                                    <th>AUC</th>
+                                    <th>FP / FN</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="fw-semibold text-start">Logistic Reg.</td>
-                                    <td id="t_lr_acc">{{ data.metrics.lr.acc }}</td>
-                                    <td id="t_lr_prec">{{ data.metrics.lr.prec }}</td>
-                                    <td id="t_lr_rec">{{ data.metrics.lr.rec }}</td>
-                                    <td id="t_lr_f1">{{ data.metrics.lr.f1 }}</td>
-                                    <td id="t_lr_auc">{{ data.metrics.lr.auc }}</td>
-                                    <td><span class="badge bg-secondary" id="t_lr_fp">{{ data.metrics.lr.fp }}</span> / <span class="badge bg-danger" id="t_lr_fn">{{ data.metrics.lr.fn }}</span></td>
+                                    <td class="text-start fw-bold text-dark">Logistic Reg.</td>
+                                    <td id="t_lr_acc" class="font-monospace">{{ data.metrics.lr.acc }}</td>
+                                    <td id="t_lr_prec" class="font-monospace">{{ data.metrics.lr.prec }}</td>
+                                    <td id="t_lr_rec" class="font-monospace">{{ data.metrics.lr.rec }}</td>
+                                    <td id="t_lr_f1" class="font-monospace">{{ data.metrics.lr.f1 }}</td>
+                                    <td id="t_lr_auc" class="font-monospace fw-bold text-primary">{{ data.metrics.lr.auc }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary font-monospace" id="t_lr_fp">{{ data.metrics.lr.fp }}</span> / 
+                                        <span class="badge bg-danger font-monospace" id="t_lr_fn">{{ data.metrics.lr.fn }}</span>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-semibold text-start">CART Tree</td>
-                                    <td id="t_cart_acc">{{ data.metrics.cart.acc }}</td>
-                                    <td id="t_cart_prec">{{ data.metrics.cart.prec }}</td>
-                                    <td id="t_cart_rec">{{ data.metrics.cart.rec }}</td>
-                                    <td id="t_cart_f1">{{ data.metrics.cart.f1 }}</td>
-                                    <td id="t_cart_auc">{{ data.metrics.cart.auc }}</td>
-                                    <td><span class="badge bg-secondary" id="t_cart_fp">{{ data.metrics.cart.fp }}</span> / <span class="badge bg-danger" id="t_cart_fn">{{ data.metrics.cart.fn }}</span></td>
+                                    <td class="text-start fw-bold text-dark">CART Tree</td>
+                                    <td id="t_cart_acc" class="font-monospace">{{ data.metrics.cart.acc }}</td>
+                                    <td id="t_cart_prec" class="font-monospace">{{ data.metrics.cart.prec }}</td>
+                                    <td id="t_cart_rec" class="font-monospace">{{ data.metrics.cart.rec }}</td>
+                                    <td id="t_cart_f1" class="font-monospace">{{ data.metrics.cart.f1 }}</td>
+                                    <td id="t_cart_auc" class="font-monospace fw-bold text-primary">{{ data.metrics.cart.auc }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary font-monospace" id="t_cart_fp">{{ data.metrics.cart.fp }}</span> / 
+                                        <span class="badge bg-danger font-monospace" id="t_cart_fn">{{ data.metrics.cart.fn }}</span>
+                                    </td>
                                 </tr>
                                 <tr>
-                                    <td class="fw-semibold text-start">Random Forest</td>
-                                    <td id="t_rf_acc">{{ data.metrics.rf.acc }}</td>
-                                    <td id="t_rf_prec">{{ data.metrics.rf.prec }}</td>
-                                    <td id="t_rf_rec">{{ data.metrics.rf.rec }}</td>
-                                    <td id="t_rf_f1">{{ data.metrics.rf.f1 }}</td>
-                                    <td id="t_rf_auc">{{ data.metrics.rf.auc }}</td>
-                                    <td><span class="badge bg-secondary" id="t_rf_fp">{{ data.metrics.rf.fp }}</span> / <span class="badge bg-danger" id="t_rf_fn">{{ data.metrics.rf.fn }}</span></td>
+                                    <td class="text-start fw-bold text-dark">Random Forest</td>
+                                    <td id="t_rf_acc" class="font-monospace">{{ data.metrics.rf.acc }}</td>
+                                    <td id="t_rf_prec" class="font-monospace">{{ data.metrics.rf.prec }}</td>
+                                    <td id="t_rf_rec" class="font-monospace">{{ data.metrics.rf.rec }}</td>
+                                    <td id="t_rf_f1" class="font-monospace">{{ data.metrics.rf.f1 }}</td>
+                                    <td id="t_rf_auc" class="font-monospace fw-bold text-primary">{{ data.metrics.rf.auc }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary font-monospace" id="t_rf_fp">{{ data.metrics.rf.fp }}</span> / 
+                                        <span class="badge bg-danger font-monospace" id="t_rf_fn">{{ data.metrics.rf.fn }}</span>
+                                    </td>
                                 </tr>
-                                <tr class="table-primary fw-bold">
-                                    <td class="text-start">Bagging</td>
-                                    <td id="t_bag_acc">{{ data.metrics.bag.acc }}</td>
-                                    <td id="t_bag_prec">{{ data.metrics.bag.prec }}</td>
-                                    <td id="t_bag_rec">{{ data.metrics.bag.rec }}</td>
-                                    <td id="t_bag_f1">{{ data.metrics.bag.f1 }}</td>
-                                    <td id="t_bag_auc">{{ data.metrics.bag.auc }}</td>
-                                    <td><span class="badge bg-secondary" id="t_bag_fp">{{ data.metrics.bag.fp }}</span> / <span class="badge bg-danger" id="t_bag_fn">{{ data.metrics.bag.fn }}</span></td>
+                                <tr class="table-primary">
+                                    <td class="text-start fw-bold text-dark">Bagging</td>
+                                    <td id="t_bag_acc" class="font-monospace fw-bold">{{ data.metrics.bag.acc }}</td>
+                                    <td id="t_bag_prec" class="font-monospace fw-bold">{{ data.metrics.bag.prec }}</td>
+                                    <td id="t_bag_rec" class="font-monospace fw-bold">{{ data.metrics.bag.rec }}</td>
+                                    <td id="t_bag_f1" class="font-monospace fw-bold">{{ data.metrics.bag.f1 }}</td>
+                                    <td id="t_bag_auc" class="font-monospace fw-bold text-primary">{{ data.metrics.bag.auc }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary font-monospace" id="t_bag_fp">{{ data.metrics.bag.fp }}</span> / 
+                                        <span class="badge bg-danger font-monospace" id="t_bag_fn">{{ data.metrics.bag.fn }}</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
-            <div class="col-lg-6">
-                <!-- Center the image and lock its display height -->
-                <div class="output-box h-100 d-flex align-items-center justify-content-center p-2">
-                    <img id="img_combined_roc" 
-                         src="data:image/png;base64,{{ data.plots.combined_roc }}" 
-                         class="img-fluid rounded w-100" 
-                         style="max-height: 320px; object-fit: contain;" 
-                         alt="Combined ROC">
+
+            <div class="col-12">
+                <div class="output-box p-3 text-center">
+                    <img id="img_combined_roc" src="data:image/png;base64,{{ data.plots.combined_roc }}" class="img-fluid rounded border" alt="Combined ROC Comparison Curve">
                 </div>
             </div>
         </div>

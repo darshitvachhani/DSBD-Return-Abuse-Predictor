@@ -1,59 +1,88 @@
+import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.metrics import roc_curve, roc_auc_score
-from models.utils import fig_to_base64, calc_metrics
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    roc_auc_score, confusion_matrix, roc_curve
+)
+from models.utils import fig_to_base64, generate_custom_confusion_matrix
 
-def run_cart(data_bundle, max_depth=3, cart_thresh=0.50, seed=42):
-    X_tr = data_bundle['X_train']
-    X_te = data_bundle['X_test']
-    y_tr = data_bundle['y_train']
-    y_te = data_bundle['y_test']
+def run_cart(data, max_depth=3, cart_thresh=0.50):
+    X_train = data['X_train']
+    y_train = data['y_train']
+    X_test = data['X_test']
+    y_test = data['y_test']
 
-    cart = DecisionTreeClassifier(max_depth=int(max_depth), min_samples_leaf=20, random_state=seed)
-    cart.fit(X_tr, y_tr)
-    y_prob = cart.predict_proba(X_te)[:, 1]
-    y_pred = (y_prob >= cart_thresh).astype(int)
-    metrics = calc_metrics(y_te, y_pred, y_prob)
-
-    # 1. Full Decision Tree Diagram (Wide Aspect for Row 2)
-    fig_t, ax = plt.subplots(figsize=(16, 6.5))
-    plot_tree(cart, feature_names=X_tr.columns.tolist(), class_names=['Legit', 'Abuse'],
-              filled=True, rounded=True, precision=2, fontsize=9, impurity=False, proportion=True, ax=ax)
-    ax.set_title(f"Pruned Classification Tree (Max Depth = {max_depth})", fontsize=11, fontweight='bold')
-    tree_b64 = fig_to_base64(fig_t)
-
-    # 2. CART Gini Feature Importance Plot (Row 3 Left)
-    fig_i, ax_i = plt.subplots(figsize=(6, 3.8))
-    pd.Series(cart.feature_importances_, index=X_tr.columns).sort_values().tail(8).plot(
-        kind='barh', color='#ff7f0e', edgecolor='black', ax=ax_i
+    cart = DecisionTreeClassifier(
+        max_depth=int(max_depth),
+        min_samples_leaf=20,
+        random_state=42
     )
-    ax_i.set_title("CART: Top Gini Feature Importances", fontsize=10, fontweight='bold')
-    ax_i.set_xlabel("Gini Importance Score")
-    ax_i.grid(axis='x', linestyle=':', alpha=0.6)
-    plt.tight_layout()
-    cart_imp_b64 = fig_to_base64(fig_i)
+    cart.fit(X_train, y_train)
 
-    # 3. CART ROC Curve (Row 3 Right - Matching Height & Width)
-    fig_r, ax_r = plt.subplots(figsize=(6, 3.8))
-    fpr, tpr, _ = roc_curve(y_te, y_prob)
-    ax_r.plot(fpr, tpr, color='#ff7f0e', lw=2, label=f"AUC = {roc_auc_score(y_te, y_prob):.4f}")
-    ax_r.plot([0, 1], [0, 1], 'k--', lw=1)
-    ax_r.set_xlabel("False Positive Rate")
-    ax_r.set_ylabel("True Positive Rate")
-    ax_r.set_title("CART Decision Tree ROC Curve", fontsize=10, fontweight='bold')
-    ax_r.legend(loc='lower right', fontsize=8)
-    ax_r.grid(True, linestyle=':', alpha=0.6)
+    y_prob = cart.predict_proba(X_test)[:, 1]
+    y_pred = (y_prob >= float(cart_thresh)).astype(int)
+
+    acc = accuracy_score(y_test, y_pred)
+    prec = precision_score(y_test, y_pred, zero_division=0)
+    rec = recall_score(y_test, y_pred, zero_division=0)
+    f1 = f1_score(y_test, y_pred, zero_division=0)
+    auc_val = roc_auc_score(y_test, y_prob)
+    cm = confusion_matrix(y_test, y_pred)
+
+    # 1. Decision Tree Visualization
+    fig_tree, ax_tree = plt.subplots(figsize=(10, 4.2))
+    plot_tree(
+        cart,
+        feature_names=X_train.columns.tolist(),
+        class_names=['Legit', 'Abuse'],
+        filled=True,
+        rounded=True,
+        fontsize=7,
+        ax=ax_tree,
+        max_depth=3,
+        proportion=True
+    )
+    ax_tree.set_title(f"Pruned Classification Tree (Max Depth = {max_depth})", fontsize=9, fontweight='bold')
     plt.tight_layout()
-    roc_b64 = fig_to_base64(fig_r)
+    plot_tree_b64 = fig_to_base64(fig_tree)
+
+    # 2. Confusion Matrix Plot
+    plot_cm_b64 = generate_custom_confusion_matrix(cm, "CART Decision Tree")
+
+    # 3. ROC Curve
+    fpr, tpr, _ = roc_curve(y_test, y_prob)
+    fig_roc, ax_roc = plt.subplots(figsize=(5.2, 3.8))
+    ax_roc.plot(fpr, tpr, color='#ea580c', lw=2, label=f'CART Tree (AUC = {auc_val:.4f})')
+    ax_roc.plot([0, 1], [0, 1], color='#64748b', linestyle='--', lw=1)
+    ax_roc.set_xlabel('1 - Specificity (False Positive Rate)', fontsize=8.5)
+    ax_roc.set_ylabel('Sensitivity (True Positive Rate)', fontsize=8.5)
+    ax_roc.set_title('CART Decision Tree ROC Curve', fontsize=9.5, fontweight='bold')
+    ax_roc.legend(loc='lower right', fontsize=8)
+    ax_roc.grid(True, linestyle=':', alpha=0.5)
+    plt.tight_layout()
+    plot_roc_b64 = fig_to_base64(fig_roc)
 
     return {
         'model': cart,
         'y_prob': y_prob,
-        'metrics': metrics,
+        'metrics': {
+            'acc': f"{acc:.4f}",
+            'prec': f"{prec:.4f}",
+            'rec': f"{rec:.4f}",
+            'f1': f"{f1:.4f}",
+            'auc': f"{auc_val:.4f}",
+            'tn': int(cm[0, 0]),
+            'fp': int(cm[0, 1]),
+            'fn': int(cm[1, 0]),
+            'tp': int(cm[1, 1])
+        },
         'plots': {
-            'cart_tree': tree_b64,
-            'cart_imp': cart_imp_b64,
-            'roc_cart': roc_b64
+            'cart_tree': plot_tree_b64,
+            'cart_cm': plot_cm_b64,
+            'cart_roc': plot_roc_b64
         }
     }
